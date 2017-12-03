@@ -1,5 +1,1 @@
-{
-  "test_dungeon.py::test_flood_fill": true,
-  "test_dungeon.py::test_get_adj_tiles": true,
-  "test_dungeon.py::test_room_count": true
-}
+{}

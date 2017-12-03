@@ -32,7 +32,7 @@ def test_room_count():
 
 def test_get_adj_tiles():
     mz = Maze(size=3)
-    assert mz.get_adj_tiles(1, 1) == [(0, 1), (0, 2), (1, 2), (2, 1)]
+    assert mz.get_adj_tiles(1, 1) == [(1, 0), (0, 1), (2, 1), (1, 2)]
     assert mz.get_adj_tiles(0, 0) == [(1, 0), (0, 1)]
 
 

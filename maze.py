@@ -46,17 +46,29 @@ class Maze:
             for x in range(self.size):
                 if bools[y][x]:
                     n += 1
-                    # TODO hook up flood fill here
+                    self.flood_fill(bools, x, y)
         return n
 
     def flood_fill(self, bools, x, y):
         """for the cell with value True at x, y in 2D array bools, first
          mark it False, and if adjacent cells are True, call flood_fill
-         on them also."""
-        pass
+         on them also. We've effectively filled a 'room'."""
+        bools[y][x] = False
+        for (x_2, y_2) in self.get_adj_tiles(x, y):
+            if bools[y_2][x_2]:
+                self.flood_fill(bools, x_2, y_2)
 
     def get_adj_tiles(self, x, y):
         """returns a list of (x, y) tuples describing adjacent coordinates.
         Respects the edge of the board and corners."""
-        pass
-
+        size = self.size - 1
+        lst = []
+        if y > 0:
+            lst.append((x, y - 1))
+        if x > 0:
+            lst.append((x - 1, y))
+        if x < size:
+            lst.append((x + 1, y))
+        if y < size:
+            lst.append((x, y + 1))
+        return lst
