@@ -11,8 +11,12 @@ class Maze:
 
     def make_maze(self):
         """returns a maze ready for play. PH code here!"""
-        maze = self.init_maze()
-        return maze
+        init_maze = self.init_maze()
+        maze = []
+        for row in init_maze:
+            pass  # straight copy of the first 'wall' row to maze
+            # then make 2 'rooms' in the next row
+        return init_maze
 
     def init_maze(self):
         """returns a 'blank' maze."""
@@ -30,13 +34,14 @@ class Maze:
             cell_open = False
         return maze
 
-    def room_count(self,):
-        """Counts rooms."""
+    def room_count(self, maze):
+        """Counts rooms. Takes a 2d maze array. Doesn't use attrs because
+        that way it can be sent an arbitrary subsection of the array."""
         n = 0
         bools = []
-        for y in range(self.size):
+        for y in range(len(maze)):
             bool_row = []
-            for x in range(self.size):
+            for x in range(len(maze[0])):
                 if type(self.maze[y][x]) == Wall:
                     bool_row.append(False)
                 else:
