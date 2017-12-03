@@ -54,7 +54,7 @@ class Maze:
          mark it False, and if adjacent cells are True, call flood_fill
          on them also."""
         pass
-    
+
     def get_adj_tiles(self, x, y):
         """returns a list of (x, y) tuples describing adjacent coordinates.
         Respects the edge of the board and corners."""

@@ -28,3 +28,19 @@ def test_room_count():
     mz = Maze(size=5)
     mz.maze[1][2] = Tile()
     assert mz.room_count() == 3
+
+
+def test_get_adj_tiles():
+    mz = Maze(size=3)
+    assert mz.get_adj_tiles(1, 1) == [(0, 1), (0, 2), (1, 2), (2, 1)]
+    assert mz.get_adj_tiles(0, 0) == [(1, 0), (0, 1)]
+
+
+def test_flood_fill():
+    mz = Maze(size=3)
+    bools = [[True, True, True], [True, True, True], [True, True, True]]
+    mz.flood_fill(bools, 1, 1)
+    assert bools == [[False, False, False], [False, False, False], [False, False, False], ]
+    bools = [[True, True, True], [False, False, False], [True, True, True]]
+    mz.flood_fill(bools, 0, 0)
+    assert bools == [[False, False, False], [False, False, False], [True, True, True]]
