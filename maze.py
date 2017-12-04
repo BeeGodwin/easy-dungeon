@@ -3,6 +3,7 @@ import random
 from copy import copy, deepcopy
 from math import sqrt
 
+
 class Maze:
     """the game board. Essentially a 2D array of tiles."""
 
@@ -13,7 +14,7 @@ class Maze:
 
     def make_maze(self):
         """returns a maze ready for play. PH code here!"""
-        mz = self.init_maze()  # inner maze of bools
+        mz = self.init_maze()  # inner maze of booleans
         rms = int(sqrt(len(mz)))
         for i in range(len(mz)):
             if i % 2 == 0:
@@ -85,7 +86,8 @@ class Maze:
         else:
             return n
 
-    def get_adj_tiles(self, ary, x, y):
+    @staticmethod
+    def get_adj_tiles(ary, x, y):
         """returns a list of (x, y) tuples describing adjacent coordinates in
         array ary. Respects the edge of the board and corners."""
         y_size = len(ary) - 1
@@ -104,7 +106,6 @@ class Maze:
     def bools_to_mz(self, bools):
         """Takes the 'inner' maze represented by 2d array bools, and turns it into
         a maze of tiles. Returns this maze."""
-
         wall_top = [Wall(px=self.tile_px) for _ in range(len(bools[0]) + 2)]
         wall_bottom = deepcopy(wall_top)
         maze = [wall_top]
