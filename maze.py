@@ -18,13 +18,24 @@ class Maze:
             # then make 2 'rooms' in the next row
         return init_maze
 
+    def make_rooms_in_row(self, lst, n):
+        """Given a 2d array containing a list of one list of tiles (a row),
+        remove just enough wall tiles to have it contain n rooms."""
+        pass
+    
+    def join_rooms(self, mz, n):
+        """Given a partial maze with the most recent row at the bottom, remove 
+        wall tiles from the most recent solid row until we are back to 
+        n rooms."""
+        pass
+
     def init_maze(self):
         """returns a 'blank' maze."""
         t_px, size = self.tilepx, self.size
-        maze = [[Wall(px=t_px) for _ in range(size)] for _ in range(size)]
+        mz = [[Wall(px=t_px) for _ in range(size)] for _ in range(size)]
         cell_row = False
         cell_open = False
-        for row in maze:
+        for row in mz:
             if cell_row:
                 for i in range(len(row)):
                     if cell_open:
@@ -32,23 +43,23 @@ class Maze:
                     cell_open = not cell_open
             cell_row = not cell_row
             cell_open = False
-        return maze
+        return mz
 
-    def room_count(self, maze):
+    def room_count(self, mz):
         """Counts rooms. Takes a 2d maze array. Doesn't use attrs because
         that way it can be sent an arbitrary subsection of the array."""
         n = 0
         bools = []
-        for y in range(len(maze)):
+        for y in range(len(mz)):
             bool_row = []
-            for x in range(len(maze[0])):
+            for x in range(len(mz[0])):
                 if type(self.maze[y][x]) == Wall:
                     bool_row.append(False)
                 else:
                     bool_row.append(True)  # true means it's a room / path
             bools.append(bool_row)
-        for y in range(self.size):
-            for x in range(self.size):
+        for y in range(len(bools)):
+            for x in range(len(bools[0])):
                 if bools[y][x]:
                     n += 1
                     self.flood_fill(bools, x, y)

@@ -49,3 +49,11 @@ def test_flood_fill():
     bools = [[True, True, True], [False, False, False], [True, True, True]]
     mz.flood_fill(bools, 0, 0)
     assert bools == [[False, False, False], [False, False, False], [True, True, True]]
+
+
+def test_make_rooms_in_row():
+    pass
+
+
+def test_join_rooms():
+    pass
