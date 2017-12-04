@@ -6,9 +6,10 @@ class Tile:
         self.px = px
         self.col = col
 
-    # TODO define a base Tile class and extend through inheritance.
-    # that might be as much as we need in terms of gameplay.
-    # tiles can be a little bit like a FSM
+    def __eq__(self, other):
+        if type(self) == type(other):
+            return True
+        return False
 
 
 class Wall(Tile):

@@ -6,8 +6,14 @@ from play_dungeon import *
 
 
 def test_init_maze():
-    mz = Maze(size=3)
-    assert mz.init_maze()[0][0]
+    mz = Maze(size=9)
+    maze = mz.init_maze()
+    assert len(maze) == 7
+    assert len(maze[0]) == 7
+    assert maze[0] == [True, False, True, False, True, False, True]
+    assert maze[1] == [False, False, False, False, False, False, False]
+    for i in range(5):
+        assert maze[i] == maze[i + 2]
 
 
 def test_room_count():
@@ -44,6 +50,8 @@ def test_flood_fill():
 
 
 def test_make_rooms_in_row():
+    mz = Maze(size=5)
+    # maze =
     pass
 
 
