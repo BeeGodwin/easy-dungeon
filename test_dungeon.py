@@ -3,6 +3,7 @@ from player import Player
 from tile import Tile
 from tile import Wall
 from play_dungeon import *
+import random
 
 
 def test_init_maze():
@@ -34,26 +35,46 @@ def test_room_count():
 
 def test_get_adj_tiles():
     mz = Maze(size=3)
-    assert mz.get_adj_tiles(1, 1) == [(1, 0), (0, 1), (2, 1), (1, 2)]
-    assert mz.get_adj_tiles(0, 0) == [(1, 0), (0, 1)]
-    assert mz.get_adj_tiles(2, 2) == [(2, 1), (1, 2)]
+    maze = [[True for _ in range(3)] for _ in range(3)]
+    assert mz.get_adj_tiles(maze, 1, 1) == [(1, 0), (0, 1), (2, 1), (1, 2)]
+    assert mz.get_adj_tiles(maze, 0, 0) == [(1, 0), (0, 1)]
+    assert mz.get_adj_tiles(maze, 2, 2) == [(2, 1), (1, 2)]
 
 
 def test_flood_fill():
     mz = Maze(size=3)
     bools = [[True, True, True], [True, True, True], [True, True, True]]
-    mz.flood_fill(bools, 1, 1)
-    assert bools == [[False, False, False], [False, False, False], [False, False, False], ]
+    assert mz.flood_fill(bools, 0, 0) == 9
+    assert bools == [[False, False, False], [False, False, False], [False, False, False]]
     bools = [[True, True, True], [False, False, False], [True, True, True]]
-    mz.flood_fill(bools, 0, 0)
+    assert mz.flood_fill(bools, 0, 0) == 3
     assert bools == [[False, False, False], [False, False, False], [True, True, True]]
 
 
 def test_make_rooms_in_row():
     mz = Maze(size=5)
-    # maze =
-    pass
+    assert mz.make_rooms_in_row([True, False, True], 1) == [True, True, True]
+    random.seed(1)  # random.randrange(2) returns 0
+    assert mz.make_rooms_in_row([True, False, True, False, True], 2) == [True, True, True, False, True]
 
 
 def test_join_rooms():
-    pass
+    mz = Maze(size=5)
+    walls = mz.join_rooms([True, True, True], [False, False, False], 1)
+    random.seed(1)
+    assert walls == [True, False, False]
+
+
+def test_bools_to_maze():
+    mz = Maze(size=5)
+    bools = [[True, True, True], [False, False, True], [True, True, True]]
+    maze = mz.bools_to_mz(bools)
+    assert len(maze) == 5
+    assert len(maze[0]) == 5
+    wall, tile = Wall(), Tile()
+    for i in range(len(maze)):
+        assert maze[0][i] == wall
+        assert maze[i][0] == wall
+    assert maze[1][1] == tile
+    assert maze[2][1] == wall
+

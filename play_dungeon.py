@@ -13,10 +13,10 @@ def main():
     clock = pygame.time.Clock()
     fps = 30
 
-    tile_sq = 17
-    tile_px = 32
+    tile_sq = 33
+    tile_px = 16
     mz_px = tile_px * tile_sq
-    mz = Maze(size=tile_sq, tilepx=tile_px)
+    mz = Maze(size=tile_sq, tile_px=tile_px)
     mz_rect = Rect((wi - mz_px) / 2, (hi - mz_px) / 2, mz_px, mz_px)
 
     player = Player()
@@ -51,9 +51,9 @@ def draw_maze(d_surf, mz, mz_rect):
 
 def draw_player(d_surf, player, mz, mz_rect):
     """Draw the player."""
-    rct_left = mz_rect.left + mz.tilepx * player.x
-    rct_top = mz_rect.top + mz.tilepx * player.y
-    ply_rct = Rect(rct_left, rct_top, mz.tilepx, mz.tilepx)
+    rct_left = mz_rect.left + mz.tile_px * player.x
+    rct_top = mz_rect.top + mz.tile_px * player.y
+    ply_rct = Rect(rct_left, rct_top, mz.tile_px, mz.tile_px)
     d_surf.fill((127, 255, 127), ply_rct)  # PH
 
 
