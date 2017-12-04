@@ -6,32 +6,24 @@ from play_dungeon import *
 
 
 def test_init_maze():
-    mz = Maze(size=15)
-    assert len(mz.init_maze()) == 15
-    assert len(mz.init_maze()[0]) == 15
-    for tile in mz.init_maze()[0]:
-        assert type(tile) == Wall
-    for tile in mz.init_maze()[14]:
-        assert type(tile) == Wall
-    for i in range(len(mz.init_maze())):
-        assert type(mz.init_maze()[i][0]) == Wall
-        assert type(mz.init_maze()[i][14]) == Wall
-
-
-def test_room_count():  # works! but will break once I'm actually making mazes.
     mz = Maze(size=3)
-    assert mz.room_count(mz.maze) == 1
-    mz = Maze(size=5)
-    assert mz.room_count(mz.maze) == 4
-    mz = Maze(size=7)
-    assert mz.room_count(mz.maze) == 9
-    mz = Maze(size=5)
-    mz.maze[1][2] = Tile()
-    assert mz.room_count(mz.maze) == 3
-    mz.maze[2][1] = Tile()
-    assert mz.room_count(mz.maze) == 2
-    mz = Maze(size=17)
-    assert mz.room_count(mz.maze) == 64
+    assert mz.init_maze()[0][0]
+
+
+def test_room_count():
+    mz = Maze(size=3)
+    assert mz.room_count([[False, False, False],
+                          [False, True, False],
+                          [False, False, False]]) == 1
+    assert mz.room_count([[True, False, True],
+                          [False, True, False],
+                          [True, False, True]]) == 5
+    assert mz.room_count([[False, False, False],
+                          [False, False, False],
+                          [False, False, False]]) == 0
+    assert mz.room_count([[True, True, True],
+                          [True, True, True],
+                          [True, True, True]]) == 1
 
 
 def test_get_adj_tiles():
