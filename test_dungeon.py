@@ -60,9 +60,9 @@ def test_make_rooms_in_row():
 
 def test_join_rooms():
     mz = Maze(size=5)
-    walls = mz.join_rooms([True, True, True], [False, False, False], 1)
+    walls = mz.join_rooms([True, True, True], [False, False, False])
     random.seed(1)
-    assert walls == [True, False, False]
+    assert walls == [False, False, True]
 
 
 def test_bools_to_maze():
@@ -78,3 +78,13 @@ def test_bools_to_maze():
     assert maze[1][1] == tile
     assert maze[2][1] == wall
 
+
+# def test_complete_maze():
+#     pass
+
+
+def test_room_coords():
+    mz = Maze(size=5)
+    bools = [[True, True, True], [False, False, True], [True, True, True]]
+    assert mz.room_coords(bools, 0, 0) == [
+        (0, 0), (1, 0), (2, 0), (1, 2), (0, 2), (1, 2), (2, 2)]

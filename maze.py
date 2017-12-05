@@ -3,6 +3,7 @@ import random
 from copy import copy, deepcopy
 from math import sqrt
 
+
 class Maze:
     """the game board. Essentially a 2D array of tiles."""
 
@@ -123,4 +124,18 @@ class Maze:
         maze.append(wall_bottom)
 
         return maze
+
+    def complete_maze(self, bools):
+        """Takes an almost-finished maze of boolean values. Ensures that the
+        maze consists of one 'room', and if not, modifies it so it does.
+        Returns completed maze of boolean values."""
+        count = self.room_count(copy(bools))
+        while count > 1:
+            pass
+
+    def room_coords(self, bools, x, y):
+        """returns a coordinate list of all the tiles in the room containing
+        tile at (x, y)."""
+        pass
+
 
