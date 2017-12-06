@@ -125,3 +125,17 @@ class Maze:
 
         return maze
 
+    def complete_maze(self, bools):
+        """Takes an almost-finished maze of boolean values. Ensures that the
+        maze consists of one 'room', and if not, modifies it so it does.
+        Returns completed maze of boolean values."""
+        count = self.room_count(copy(bools))
+        while count > 1:
+            pass
+
+    def room_coords(self, bools, x, y):
+        """returns a coordinate list of all the tiles in the room containing
+        tile at (x, y)."""
+        pass
+
+
