@@ -7,14 +7,16 @@ from math import sqrt
 class Maze:
     """the game board. Essentially a 2D array of tiles."""
 
+    # TODO- sort out which methods are class methods, and which are object methods.
+
     def __init__(self, size=17, tile_px=32):
         self.size = size  # tiles square. Should be odd.
         self.tile_px = tile_px
         self.maze = self.make_maze()
 
     def make_maze(self):
-        """returns a maze ready for play. PH code here!"""
-        mz = self.init_maze()  # inner maze of booleans
+        """returns a maze ready for play."""
+        mz = self.init_maze()
         rms = int(sqrt(len(mz)))
         for i in range(len(mz)):
             if i % 2 == 0:
@@ -22,8 +24,7 @@ class Maze:
             else:
                 mz[i] = self.join_rooms(mz[i-1], mz[i])
 
-        # TODO- solve the issue of orphaned rooms.
-        # TODO- find the coordinate list of a room?
+
         maze = self.bools_to_mz(mz)
         return maze
 
@@ -129,6 +130,7 @@ class Maze:
         """Takes an almost-finished maze of boolean values. Ensures that the
         maze consists of one 'room', and if not, modifies it so it does.
         Returns completed maze of boolean values."""
+        # TODO- solve the issue of orphaned rooms.
         count = self.room_count(copy(bools))
         while count > 1:
             pass
@@ -136,6 +138,13 @@ class Maze:
     def room_coords(self, bools, x, y):
         """returns a coordinate list of all the tiles in the room containing
         tile at (x, y)."""
+        # TODO- find the coordinate list of a room?
         pass
+
+    def move_is_legal(self, player):
+        """Check to see that the player's next move is legal and return True / False."""
+        if type(self.maze[player.next_y][player.next_x]) == Tile:
+            return True
+        return False
 
 

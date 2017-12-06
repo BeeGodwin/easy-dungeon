@@ -29,7 +29,11 @@ def main():
                 sys.exit()
             elif e.type == KEYDOWN:
                 player.handle_input(e.key)
-                # TODO check player position is legal. need to save last pos.
+
+            if mz.move_is_legal(player):
+                player.update_pos()
+            else:
+                player.next_x, player.next_y = player.x, player.y
 
         d_surf.fill((0, 0, 0))
         draw_maze(d_surf, mz, mz_rect)

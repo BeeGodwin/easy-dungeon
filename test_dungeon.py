@@ -88,3 +88,16 @@ def test_room_coords():
     bools = [[True, True, True], [False, False, True], [True, True, True]]
     assert mz.room_coords(bools, 0, 0) == [
         (0, 0), (1, 0), (2, 0), (1, 2), (0, 2), (1, 2), (2, 2)]
+
+
+def test_move_is_legal():
+    random.seed(1)
+    mz = Maze(size=5)
+    player = Player()
+    assert player.x == 1
+    assert player.y == 1
+    player.next_x = 2
+    assert mz.move_is_legal(player)
+    player.update_pos()
+    player.next_y = 2
+    assert not mz.move_is_legal(player)
