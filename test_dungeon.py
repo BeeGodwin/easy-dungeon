@@ -4,6 +4,7 @@ from tile import Tile
 from tile import Wall
 from play_dungeon import *
 import random
+from copy import deepcopy
 
 
 def test_init_maze():
@@ -79,15 +80,20 @@ def test_bools_to_maze():
     assert maze[2][1] == wall
 
 
-# def test_complete_maze():
-#     pass
+# def test_complete_maze():  # bit borked!
+#     mz = Maze(size=5)
+#     bools = [[True, True, True], [False, False, True], [True, True, True]]
+#     assert mz.complete_maze(deepcopy(bools)) == bools
+#     bools = [[True, False, True], [True, False, True], [True, False, True]]
+#     bools = mz.complete_maze(bools)
+#     assert mz.room_count(bools) == 1
 
 
 def test_room_coords():
     mz = Maze(size=5)
     bools = [[True, True, True], [False, False, True], [True, True, True]]
-    assert mz.room_coords(bools, 0, 0) == [
-        (0, 0), (1, 0), (2, 0), (1, 2), (0, 2), (1, 2), (2, 2)]
+    assert sorted(mz.room_coords(bools, 0, 0)) == [
+        (0, 0), (0, 2), (1, 0), (1, 2), (2, 0),(2, 1), (2, 2)]
 
 
 def test_move_is_legal():

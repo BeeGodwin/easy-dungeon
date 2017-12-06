@@ -24,7 +24,7 @@ class Maze:
             else:
                 mz[i] = self.join_rooms(mz[i-1], mz[i])
 
-
+        mz = self.complete_maze(mz)
         maze = self.bools_to_mz(mz)
         return maze
 
@@ -64,8 +64,10 @@ class Maze:
         return maze
 
     def room_count(self, bools):
-        """Counts rooms. Takes a 2d array of bools."""
+        """Counts rooms. Takes a 2d array of bools. Copy the array before
+        sending (bad coding there!)"""
         n = 0
+
         for y in range(len(bools)):
             for x in range(len(bools[0])):
                 if bools[y][x]:
@@ -130,28 +132,27 @@ class Maze:
         """Takes an almost-finished maze of boolean values. Ensures that the
         maze consists of one 'room', and if not, modifies it so it does.
         Returns completed maze of boolean values."""
-        # TODO- solve the issue of orphaned rooms.
-        count = self.room_count(copy(bools))
-        while count > 1:
-            pass
+        # # TODO- solve the issue of orphaned rooms. still borked
+        # print(self.room_count(deepcopy(bools)))
+        # # plan B!
+        # while self.room_count(deepcopy(bools)) > 1:
+        #     count = self.room_count([copy(bools[-1])])
+        #     # bools[-1] = self.make_rooms_in_row(bools[-1], 1)
+
+        return bools
+
 
     def room_coords(self, bools, x, y):
         """returns a coordinate list of all the tiles in the room containing
         tile at (x, y)."""
         coord_lst = [(x, y)]
-        for i in range(len(bools)):
-            for j in range(len(bools[0])):
-                print(bools[i][j])
-            print()
 
         def recurse(x, y):
             for (adj_x, adj_y) in self.get_adj_tiles(bools, x, y):
-                if (adj_x, adj_y) not in coord_lst and bools[adj_x][adj_y]:
+                if (adj_x, adj_y) not in coord_lst and bools[adj_y][adj_x]:
                     coord_lst.append((adj_x, adj_y))
-                    print(coord_lst)
                     recurse(adj_x, adj_y)
 
-        print(coord_lst)
         recurse(x, y)
 
         return coord_lst
