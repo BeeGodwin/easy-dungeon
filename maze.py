@@ -138,8 +138,23 @@ class Maze:
     def room_coords(self, bools, x, y):
         """returns a coordinate list of all the tiles in the room containing
         tile at (x, y)."""
-        # TODO- find the coordinate list of a room?
-        pass
+        coord_lst = [(x, y)]
+        for i in range(len(bools)):
+            for j in range(len(bools[0])):
+                print(bools[i][j])
+            print()
+
+        def recurse(x, y):
+            for (adj_x, adj_y) in self.get_adj_tiles(bools, x, y):
+                if (adj_x, adj_y) not in coord_lst and bools[adj_x][adj_y]:
+                    coord_lst.append((adj_x, adj_y))
+                    print(coord_lst)
+                    recurse(adj_x, adj_y)
+
+        print(coord_lst)
+        recurse(x, y)
+
+        return coord_lst
 
     def move_is_legal(self, player):
         """Check to see that the player's next move is legal and return True / False."""
