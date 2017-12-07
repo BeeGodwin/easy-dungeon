@@ -15,7 +15,7 @@ def main():
 
     tile_sq = 33
     tile_px = 16
-    mz_px = tile_px * tile_sq
+    mz_px = tile_px * (tile_sq + 2)
     mz = Maze(size=tile_sq, tile_px=tile_px)
     mz_rect = Rect((wi - mz_px) / 2, (hi - mz_px) / 2, mz_px, mz_px)
 
@@ -36,7 +36,7 @@ def main():
                 player.next_x, player.next_y = player.x, player.y
 
         d_surf.fill((0, 0, 0))
-        draw_maze(d_surf, mz, mz_rect)
+        draw_maze(d_surf, mz.mz, mz_rect)
         draw_player(d_surf, player, mz, mz_rect)
         pygame.display.update()
         clock.tick(fps)
@@ -44,13 +44,13 @@ def main():
 
 def draw_maze(d_surf, mz, mz_rect):
     """define a rect for each tile in mz.maze and draw it."""
-    t_px = mz.maze[0][0].px
-    for y in range(len(mz.maze)):
-        for x in range(len(mz.maze[0])):
+    t_px = mz[0][0].px
+    for y in range(len(mz)):
+        for x in range(len(mz[0])):
             rct_left = mz_rect.left + t_px * x
             rct_top = mz_rect.top + t_px * y
             tile_rct = Rect(rct_left, rct_top, t_px, t_px)
-            d_surf.fill(mz.maze[y][x].col, tile_rct)  # PH
+            d_surf.fill(mz[y][x].col, tile_rct)  # PH
 
 
 def draw_player(d_surf, player, mz, mz_rect):

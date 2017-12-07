@@ -21,6 +21,32 @@ def test_make_rooms():
     assert maze.make_row(15, 1, False) == [True for _ in range(15)]
 
 
+def test_instantiate_tiles():
+    m = Maze(size=3)
+    bool_maze = [[True, True, True], [False, False, True], [True, True, True]]
+    mz = m.instantiate_tiles(bool_maze)
+    assert len(mz) == 5
+    assert len(mz[0]) == 5
+    wall, tile = Wall(), Tile()
+    for i in range(len(mz)):
+        assert mz[0][i] == wall
+        assert mz[i][0] == wall
+    assert mz[1][1] == tile
+    assert mz[2][1] == wall
+
+
+def test_move_is_legal():
+    random.seed(1)
+    mz = Maze(size=5)
+    player = Player()
+    assert player.x == 1
+    assert player.y == 1
+    player.next_x = 2
+    assert mz.move_is_legal(player)
+    player.update_pos()
+    player.next_y = 2
+    assert not mz.move_is_legal(player)
+
 # def test_room_count():
 #     mz = Maze(size=3)
 #     assert mz.room_count([[False, False, False],
@@ -69,18 +95,7 @@ def test_make_rooms():
 #     assert walls == [False, False, True]
 #
 #
-# def test_bools_to_maze():
-#     mz = Maze(size=5)
-#     bools = [[True, True, True], [False, False, True], [True, True, True]]
-#     maze = mz.bools_to_mz(bools)
-#     assert len(maze) == 5
-#     assert len(maze[0]) == 5
-#     wall, tile = Wall(), Tile()
-#     for i in range(len(maze)):
-#         assert maze[0][i] == wall
-#         assert maze[i][0] == wall
-#     assert maze[1][1] == tile
-#     assert maze[2][1] == wall
+
 #
 #
 # # def test_complete_maze():  # bit borked!
@@ -99,14 +114,3 @@ def test_make_rooms():
 #         (0, 0), (0, 2), (1, 0), (1, 2), (2, 0),(2, 1), (2, 2)]
 #
 #
-# def test_move_is_legal():
-#     random.seed(1)
-#     mz = Maze(size=5)
-#     player = Player()
-#     assert player.x == 1
-#     assert player.y == 1
-#     player.next_x = 2
-#     assert mz.move_is_legal(player)
-#     player.update_pos()
-#     player.next_y = 2
-#     assert not mz.move_is_legal(player)

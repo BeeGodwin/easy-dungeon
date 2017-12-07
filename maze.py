@@ -9,8 +9,35 @@ class Maze:
     def __init__(self, size=17, tile_px=32):
         self.size = size  # tiles square. Should be odd.
         self.tile_px = tile_px
-        self.mz = make_maze()
-        self.instantiate_tiles()
+        self.mz = self.instantiate_tiles(make_maze(self.size))
+
+    def instantiate_tiles(self, bool_mz):  # Given that this array is gonna be our obj, this ought to be a method.
+        """Takes the 'inner' maze represented by 2d array bools, and turns it into
+        a maze of tiles. Returns this maze."""
+        wall_top = [Wall(px=self.tile_px) for _ in range(len(bool_mz[0]) + 2)]
+        wall_bottom = deepcopy(wall_top)
+        maze = [wall_top]
+
+        for y in range(len(bool_mz)):
+
+            row = [Wall(px=self.tile_px)]
+            for x in range(len(bool_mz[0])):
+                if bool_mz[y][x]:
+                    row.append(Tile(px=self.tile_px))
+                else:
+                    row.append(Wall(px=self.tile_px))
+            row.append(Wall(px=self.tile_px))
+
+            maze.append(row)
+        maze.append(wall_bottom)
+
+        return maze
+
+    def move_is_legal(self, player):  # definitely a method.
+        """Check to see that the player's next move is legal and return True / False."""
+        if type(self.mz[player.next_y][player.next_x]) == Tile:  # might we want an attr on the tile?
+            return True
+        return False
 
 
 def make_maze(size):
@@ -24,7 +51,6 @@ def make_maze(size):
             mz.append(make_row(size, r, True))
 
     # mz = complete_maze(mz)
-    mz = bools_to_mz(mz)
     return mz
 
 
@@ -47,33 +73,8 @@ def make_row(size, r, wall):
 
 # TODO - turn this method into Instantiate Tiles. Then we should be able to get back to playing it.
 
-#     def bools_to_mz(self, bools):  # Given that this array is gonna be our obj, this ought to be a method.
-#         """Takes the 'inner' maze represented by 2d array bools, and turns it into
-#         a maze of tiles. Returns this maze."""
-#         wall_top = [Wall(px=self.tile_px) for _ in range(len(bools[0]) + 2)]
-#         wall_bottom = deepcopy(wall_top)
-#         maze = [wall_top]
-#
-#         for y in range(len(bools)):
-#
-#             row = [Wall(px=self.tile_px)]
-#             for x in range(len(bools[0])):
-#                 if bools[y][x]:
-#                     row.append(Tile(px=self.tile_px))
-#                 else:
-#                     row.append(Wall(px=self.tile_px))
-#             row.append(Wall(px=self.tile_px))
-#
-#             maze.append(row)
-#         maze.append(wall_bottom)
-#
-#         return maze
-#
-#     def move_is_legal(self, player):  # definitely a method.
-#         """Check to see that the player's next move is legal and return True / False."""
-#         if type(self.maze[player.next_y][player.next_x]) == Tile:  # might we want an attr on the tile?
-#             return True
-#         return False
+
+
 #
 #
 
