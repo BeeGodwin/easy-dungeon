@@ -53,7 +53,14 @@ def make_maze(size):
         else:
             mz.append(join_rooms(mz[i - 1], make_row(size, r, True)))
 
-    # mz[-2] = join_rooms(mz[-1], mz[-2])  # has to be a better solution!
+    rooms = list_room_coordinates(mz)
+
+    while len(rooms) > 1:
+        # if more than one room, starting with the smallest room,
+        # look for boundaries.
+
+        rooms = list_room_coordinates(mz)
+
 
     return mz
 
@@ -118,7 +125,8 @@ def get_adj_tiles(ary, x, y):  # func
 def list_room_coordinates(boolean_maze):
     """returns a coordinate list of all the tiles in the room containing
     tile at (x, y)."""
-    # TODO modify this function so that it returns a list of lists.
+    # TODO modify this function so that it returns a list of lists,
+    # ordered from smallest to largest.
     coord_lst = [(x, y)]
 
     def recurse(x, y):
@@ -129,6 +137,19 @@ def list_room_coordinates(boolean_maze):
 
     recurse(x, y)
     return coord_lst
+
+
+def find_boundary(room_1, room_2):
+    """returns a list of all removable walls (False values) that would connect room 1
+    and room 2."""
+    # iterate thru for even values.
+        # do both rooms have values of this x?
+        # what about this y?
+        # are the two closest y values of that x exactly 2 different?
+        # or, the two closest x values of that y?
+        # if so we have a boundary. Add it to the list.
+
+    return []
 
 # def room_count(bools):  # is there a way to not have to copy before sending to this? also, func.
 #     """Counts rooms. Takes a 2d array of bools. Copy the array before
