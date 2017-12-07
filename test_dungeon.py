@@ -7,6 +7,8 @@ import random
 from copy import deepcopy
 
 
+# TODO refactor tests such that they reflect the updated maze module.
+
 def test_init_maze():
     mz = Maze(size=9)
     maze = mz.init_maze()
