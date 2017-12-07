@@ -3,6 +3,7 @@ import random
 from copy import copy, deepcopy
 from tile import *
 
+
 class Maze:
     """the game board. Essentially a 2D array of tiles."""
 
@@ -19,8 +20,8 @@ class Maze:
         maze = [wall_top]
 
         for y in range(len(bool_mz)):
-
             row = [Wall(px=self.tile_px)]
+
             for x in range(len(bool_mz[0])):
                 if bool_mz[y][x]:
                     row.append(Tile(px=self.tile_px))
@@ -29,6 +30,7 @@ class Maze:
             row.append(Wall(px=self.tile_px))
 
             maze.append(row)
+
         maze.append(wall_bottom)
 
         return maze
@@ -44,13 +46,15 @@ def make_maze(size):
     """returns a maze ready for play."""
     mz = []
     r = int(sqrt(size))  # rooms per row
-    for i in range(size):
+
+    for i in range(size):  # make rows
         if i % 2 == 0:
             mz.append(make_row(size, r, False))
         else:
-            mz.append(make_row(size, r, True))
+            mz.append(join_rooms(mz[i - 1], make_row(size, r, True)))
 
-    # mz = complete_maze(mz)
+    # mz[-2] = join_rooms(mz[-1], mz[-2])  # has to be a better solution!
+
     return mz
 
 
@@ -71,41 +75,61 @@ def make_row(size, r, wall):
     return row
 
 
-# TODO - turn this method into Instantiate Tiles. Then we should be able to get back to playing it.
+def join_rooms(row_n, wall_row):
+    """Given row_n and a wall_row, modify wall_row."""
+    # for each room in row_n, flip a random bool in wall_row within its range.
+    rooms = []
+    current_room = []
+    for i in range(len(row_n)):
+        if row_n[i]:
+            current_room.append(i)
+        else:
+            rooms.append(copy(current_room))
+            current_room = []
+    if len(current_room) > 0:
+        rooms.append(current_room)
+
+    for room in rooms:
+        if len(room) > 1:
+            i = random.randrange(room[0], room[-1], 2)
+            wall_row[i] = True
+        else:
+            wall_row[room[0]] = True
+    return wall_row
 
 
+def get_adj_tiles(ary, x, y):  # func
+    """returns a list of (x, y) tuples describing adjacent coordinates in
+    array ary. Respects the edge of the board and corners."""
+    y_size = len(ary) - 1
+    x_size = len(ary[0]) - 1
+    lst = []
+    if y > 0:
+        lst.append((x, y - 1))
+    if x > 0:
+        lst.append((x - 1, y))
+    if x < x_size:
+        lst.append((x + 1, y))
+    if y < y_size:
+        lst.append((x, y + 1))
+    return lst
 
-#
-#
 
-#
-#
-# def join_rooms(row_n, wall_row):  # make func.
-#     """Given row_n and a wall_row, modify wall_row."""
-#     # for each room in row_n, flip a random bool in wall_row within its range.
-#     wrk = [copy(row_n)]
-#     for i in range(len(wrk[0])):
-#         rm_sz = flood_fill(wrk, i, 0)
-#         if rm_sz == 1:
-#             wall_row[i] = True
-#         elif rm_sz == 0:
-#             continue
-#         else:
-#             idx = random.randrange(i, rm_sz + i, step=2)
-#             wall_row[idx] = True
-#     return wall_row
-#
-#
-# def init_maze(size):  # is this the way to start? Could we start with row rooms?
-#     """returns a square 2d array of booleans, len size -2.
-#     Values are initialised with True for a path, False for a wall."""
-#     size -= 2
-#     paths = [True if i % 2 == 0 else False for i in range(size)]
-#     walls = [False for _ in range(size)]
-#     maze = [copy(paths) if i % 2 == 0 else copy(walls) for i in range(size)]
-#     return maze
-#
-#
+def list_room_coordinates(boolean_maze):
+    """returns a coordinate list of all the tiles in the room containing
+    tile at (x, y)."""
+    # TODO modify this function so that it returns a list of lists.
+    coord_lst = [(x, y)]
+
+    def recurse(x, y):
+        for (adj_x, adj_y) in get_adj_tiles(boolean_maze, x, y):
+            if (adj_x, adj_y) not in coord_lst and boolean_maze[adj_y][adj_x]:
+                coord_lst.append((adj_x, adj_y))
+                recurse(adj_x, adj_y)
+
+    recurse(x, y)
+    return coord_lst
+
 # def room_count(bools):  # is there a way to not have to copy before sending to this? also, func.
 #     """Counts rooms. Takes a 2d array of bools. Copy the array before
 #     sending (bad coding there!)"""
@@ -133,28 +157,13 @@ def make_row(size, r, wall):
 #     else:
 #         return n
 #
-# def get_adj_tiles(ary, x, y):  # func
-#     """returns a list of (x, y) tuples describing adjacent coordinates in
-#     array ary. Respects the edge of the board and corners."""
-#     y_size = len(ary) - 1
-#     x_size = len(ary[0]) - 1
-#     lst = []
-#     if y > 0:
-#         lst.append((x, y - 1))
-#     if x > 0:
-#         lst.append((x - 1, y))
-#     if x < x_size:
-#         lst.append((x + 1, y))
-#     if y < y_size:
-#         lst.append((x, y + 1))
-#     return lst
+
 #
 #
 # # def complete_maze(self, bools):  # see if you still need to do this when at bottom of rabbit hole
 # #     """Takes an almost-finished maze of boolean values. Ensures that the
 # #     maze consists of one 'room', and if not, modifies it so it does.
 # #     Returns completed maze of boolean values."""
-# #     # # TODO- solve the issue of orphaned rooms. still borked
 # #     # print(self.room_count(deepcopy(bools)))
 # #     # # plan B!
 # #     # while self.room_count(deepcopy(bools)) > 1:
@@ -163,17 +172,5 @@ def make_row(size, r, wall):
 # #
 # #     return bools
 #
-# def room_coords(bools, x, y):  # func again, given that it's used in construction.
-#     """returns a coordinate list of all the tiles in the room containing
-#     tile at (x, y)."""
-#     coord_lst = [(x, y)]
+
 #
-#     def recurse(x, y):
-#         for (adj_x, adj_y) in get_adj_tiles(bools, x, y):
-#             if (adj_x, adj_y) not in coord_lst and bools[adj_y][adj_x]:
-#                 coord_lst.append((adj_x, adj_y))
-#                 recurse(adj_x, adj_y)
-#
-#     recurse(x, y)
-#
-#     return coord_lst
