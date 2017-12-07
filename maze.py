@@ -55,11 +55,11 @@ def make_maze(size):
 
     rooms = list_room_coordinates(mz)
 
-    while len(rooms) > 1:
-        # if more than one room, starting with the smallest room,
-        # look for boundaries.
-
-        rooms = list_room_coordinates(mz)
+    # while len(rooms) > 1:
+    #     # if more than one room, starting with the smallest room,
+    #     # look for boundaries.
+    #
+    #     rooms = list_room_coordinates(mz)
 
 
     return mz
@@ -127,15 +127,29 @@ def list_room_coordinates(boolean_maze):
     tile at (x, y)."""
     # TODO modify this function so that it returns a list of lists,
     # ordered from smallest to largest.
-    coord_lst = [(x, y)]
+    coord_lst = []
 
-    def recurse(x, y):
-        for (adj_x, adj_y) in get_adj_tiles(boolean_maze, x, y):
-            if (adj_x, adj_y) not in coord_lst and boolean_maze[adj_y][adj_x]:
+    def recurse(x, y):  # Change this so we pass the list down. cld then be sep func?
+        for (adj_x, adj_y) in get_adj_tiles(wrk, x, y):
+            if (adj_x, adj_y) not in coord_lst and wrk[adj_y][adj_x]:
+
                 coord_lst.append((adj_x, adj_y))
                 recurse(adj_x, adj_y)
 
-    recurse(x, y)
+    wrk = deepcopy(boolean_maze)
+
+    for y in range(len(wrk)):
+        for x in range(len(wrk[0])):
+            if wrk[y][x]:
+                # if flood filling, every tile this encounters must be a new room
+                # hence, start a new list and pass it in.
+                recurse(x, y)
+                # let's make a recursive algo that mixes the best of flood_fill and
+                # room coord maker above.
+                # use working copy, fill bool values, and make a list of
+                # (x, y) pairs.
+                # the list knows how many tiles in the room AND the locs.
+
     return coord_lst
 
 
