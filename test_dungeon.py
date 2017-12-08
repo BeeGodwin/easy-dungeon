@@ -8,7 +8,7 @@ import random
 from copy import deepcopy
 
 
-def test_make_rooms():
+def test_make_row():
     assert maze.make_row(5, 1, True) == [False, False, False, False, False]
     assert maze.make_row(3, 2, False) == [True, False, True]
     assert maze.make_row(5, 3, False) == [True, False, True, False, True]
@@ -56,54 +56,9 @@ def test_get_adj_tiles():
     assert maze.get_adj_tiles(mz, 2, 2) == [(2, 1), (1, 2)]
 
 
-def test_list_room_coordinates():
+def test_room_coordinates():
     mz = [[True, False, True], [True, False, True], [True, False, True]]
-    assert maze.list_room_coordinates(mz) == [[(0, 0), (0, 1), (0, 2)],
+    assert maze.room_coordinates(mz) == [[(0, 0), (0, 1), (0, 2)],
                                               [(2, 0), (2, 1), (2, 2)]]
 
 
-# def test_room_count():
-#     mz = Maze(size=3)
-#     assert mz.room_count([[False, False, False],
-#                           [False, True, False],
-#                           [False, False, False]]) == 1
-#     assert mz.room_count([[True, False, True],
-#                           [False, True, False],
-#                           [True, False, True]]) == 5
-#     assert mz.room_count([[False, False, False],
-#                           [False, False, False],
-#                           [False, False, False]]) == 0
-#     assert mz.room_count([[True, True, True],
-#                           [True, True, True],
-#                           [True, True, True]]) == 1
-#
-#
-
-#
-#
-# def test_flood_fill():
-#     mz = Maze(size=3)
-#     bools = [[True, True, True], [True, True, True], [True, True, True]]
-#     assert mz.flood_fill(bools, 0, 0) == 9
-#     assert bools == [[False, False, False], [False, False, False], [False, False, False]]
-#     bools = [[True, True, True], [False, False, False], [True, True, True]]
-#     assert mz.flood_fill(bools, 0, 0) == 3
-#     assert bools == [[False, False, False], [False, False, False], [True, True, True]]
-#
-
-# # def test_complete_maze():  # bit borked!
-# #     mz = Maze(size=5)
-# #     bools = [[True, True, True], [False, False, True], [True, True, True]]
-# #     assert mz.complete_maze(deepcopy(bools)) == bools
-# #     bools = [[True, False, True], [True, False, True], [True, False, True]]
-# #     bools = mz.complete_maze(bools)
-# #     assert mz.room_count(bools) == 1
-#
-#
-# def test_room_coords():
-#     mz = Maze(size=5)
-#     bools = [[True, True, True], [False, False, True], [True, True, True]]
-#     assert sorted(mz.room_coords(bools, 0, 0)) == [
-#         (0, 0), (0, 2), (1, 0), (1, 2), (2, 0),(2, 1), (2, 2)]
-#
-#

@@ -41,6 +41,9 @@ class Maze:
             return True
         return False
 
+    # def make_tree(self)
+    # make a logical map of the maze from player's starting point
+    # identify terminii and put loot there
 
 def make_maze(size):
     """returns a maze ready for play."""
@@ -105,7 +108,7 @@ def join_rooms(row_n, wall_row):
     return wall_row
 
 
-def get_adj_tiles(ary, x, y):  # func
+def get_adj_tiles(ary, x, y):
     """returns a list of (x, y) tuples describing adjacent coordinates in
     array ary. Respects the edge of the board and corners."""
     y_size = len(ary) - 1
@@ -122,48 +125,63 @@ def get_adj_tiles(ary, x, y):  # func
     return lst
 
 
-def list_room_coordinates(boolean_maze):
+def room_coordinates(boolean_maze):
     """returns a coordinate list of all the tiles in the room containing
     tile at (x, y)."""
     # TODO modify this function so that it returns a list of lists,
     # ordered from smallest to largest.
     coord_lst = []
-
-    def recurse(x, y):  # Change this so we pass the list down. cld then be sep func?
-        for (adj_x, adj_y) in get_adj_tiles(wrk, x, y):
-            if (adj_x, adj_y) not in coord_lst and wrk[adj_y][adj_x]:
-
-                coord_lst.append((adj_x, adj_y))
-                recurse(adj_x, adj_y)
-
     wrk = deepcopy(boolean_maze)
-
-    for y in range(len(wrk)):
-        for x in range(len(wrk[0])):
-            if wrk[y][x]:
-                # if flood filling, every tile this encounters must be a new room
-                # hence, start a new list and pass it in.
-                recurse(x, y)
-                # let's make a recursive algo that mixes the best of flood_fill and
-                # room coord maker above.
-                # use working copy, fill bool values, and make a list of
-                # (x, y) pairs.
-                # the list knows how many tiles in the room AND the locs.
+    #
+    # for y in range(len(wrk)):
+    #     for x in range(len(wrk[0])):
+    #         if wrk[y][x]:
+    #             # if flood filling, every tile this encounters must be a new room
+    #             # hence, start a new list and pass it in.
+    #             # recurse(x, y)
+    #             # let's make a recursive algo that mixes the best of flood_fill and
+    #             # room coord maker above.
+    #             # use working copy, fill bool values, and make a list of
+    #             # (x, y) pairs.
+    #             # the list knows how many tiles in the room AND the locs.
 
     return coord_lst
 
 
-def find_boundary(room_1, room_2):
-    """returns a list of all removable walls (False values) that would connect room 1
-    and room 2."""
-    # iterate thru for even values.
-        # do both rooms have values of this x?
-        # what about this y?
-        # are the two closest y values of that x exactly 2 different?
-        # or, the two closest x values of that y?
-        # if so we have a boundary. Add it to the list.
+def map_room(mz_cpy, x, y):  # Change this so we pass the list down. cld then be sep func?
+    for (adj_x, adj_y) in get_adj_tiles(wrk, x, y):
+        if (adj_x, adj_y) not in coord_lst and wrk[adj_y][adj_x]:
 
-    return []
+            coord_lst.append((adj_x, adj_y))
+            recurse(adj_x, adj_y)
+
+
+# def find_boundary(room_1, room_2):
+#     """returns a list of all removable walls (False values) that would connect room 1
+#     and room 2."""
+#     # iterate thru for even values.
+#         # do both rooms have values of this x?
+#         # what about this y?
+#         # are the two closest y values of that x exactly 2 different?
+#         # or, the two closest x values of that y?
+#         # if so we have a boundary. Add it to the list.
+#
+#     return []
+#     pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # def room_count(bools):  # is there a way to not have to copy before sending to this? also, func.
 #     """Counts rooms. Takes a 2d array of bools. Copy the array before
