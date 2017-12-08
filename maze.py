@@ -56,15 +56,12 @@ def make_maze(size):
         else:
             mz.append(join_rooms(mz[i - 1], make_row(size, r, True)))
 
-    rooms = list_room_coordinates(mz)
-
+    # rooms = list_room_coordinates(mz)
     # while len(rooms) > 1:
     #     # if more than one room, starting with the smallest room,
     #     # look for boundaries.
     #
     #     rooms = list_room_coordinates(mz)
-
-
     return mz
 
 
@@ -128,32 +125,29 @@ def get_adj_tiles(ary, x, y):
 def room_coordinates(boolean_maze):
     """returns a coordinate list of all the tiles in the room containing
     tile at (x, y)."""
-    # TODO modify this function so that it returns a list of lists,
-    # ordered from smallest to largest.
-    coord_lst = []
     wrk = deepcopy(boolean_maze)
-    #
-    # for y in range(len(wrk)):
-    #     for x in range(len(wrk[0])):
-    #         if wrk[y][x]:
-    #             # if flood filling, every tile this encounters must be a new room
-    #             # hence, start a new list and pass it in.
-    #             # recurse(x, y)
-    #             # let's make a recursive algo that mixes the best of flood_fill and
-    #             # room coord maker above.
-    #             # use working copy, fill bool values, and make a list of
-    #             # (x, y) pairs.
-    #             # the list knows how many tiles in the room AND the locs.
+    room_list = []
 
-    return coord_lst
+    for y in range(len(wrk)):
+        for x in range(len(wrk)):
+            if wrk[y][x]:
+                room = []
+                map_room(wrk, room, x, y)
+                room_list.append(room)
+
+    room_list.sort(key=len)
+
+    return room_list
 
 
-def map_room(mz_cpy, x, y):  # Change this so we pass the list down. cld then be sep func?
-    for (adj_x, adj_y) in get_adj_tiles(wrk, x, y):
-        if (adj_x, adj_y) not in coord_lst and wrk[adj_y][adj_x]:
-
-            coord_lst.append((adj_x, adj_y))
-            recurse(adj_x, adj_y)
+def map_room(mz_cpy, coord_lst, x, y):
+    """Recurse thru 2d boolean array mz_cpy and list all (x, y) coordinate pairs.
+    Modify both the array and the coord list."""
+    coord_lst.append((x, y))
+    mz_cpy[y][x] = False
+    for (adj_x, adj_y) in get_adj_tiles(mz_cpy, x, y):
+        if mz_cpy[adj_y][adj_x] and (adj_x, adj_y) not in coord_lst:
+            map_room(mz_cpy, coord_lst, adj_x, adj_y)
 
 
 # def find_boundary(room_1, room_2):

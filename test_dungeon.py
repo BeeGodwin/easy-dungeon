@@ -56,9 +56,17 @@ def test_get_adj_tiles():
     assert maze.get_adj_tiles(mz, 2, 2) == [(2, 1), (1, 2)]
 
 
-def test_room_coordinates():
+def test_map_room():
     mz = [[True, False, True], [True, False, True], [True, False, True]]
-    assert maze.room_coordinates(mz) == [[(0, 0), (0, 1), (0, 2)],
-                                              [(2, 0), (2, 1), (2, 2)]]
+    lst = []
+    maze.map_room(mz, lst, 0, 0)
+    assert sorted(lst) == [(0, 0), (0, 1), (0, 2)]
+    lst = []
+    maze.map_room(mz, lst, 2, 0)
+    assert sorted(lst) == [(2, 0), (2, 1), (2, 2)]
 
 
+def test_room_coordinates():
+    mz = [[True, False, True], [True, False, True], [True, False, False]]
+    room_list = maze.room_coordinates(mz)
+    assert room_list == [[(2, 0), (2, 1)], [(0, 0), (0, 1), (0, 2)]]
