@@ -70,3 +70,24 @@ def test_room_coordinates():
     mz = [[True, False, True], [True, False, True], [True, False, False]]
     room_list = maze.room_coordinates(mz)
     assert room_list == [[(2, 0), (2, 1)], [(0, 0), (0, 1), (0, 2)]]
+    assert mz == [[True, False, True], [True, False, True], [True, False, False]]
+
+
+def test_pop_bubble():
+    mz = [[True, False, True], [False, False, True], [True, True, True]]
+    maze.pop_bubble(mz, 0, 0)
+    assert len(maze.room_coordinates(mz)) == 1
+
+
+def test_finalise():
+    mz = [[True, False, True], [False, False, True], [True, True, True]]
+    maze.finalise(mz)
+    assert len(maze.room_coordinates(mz)) == 1
+    mz = [[False, True, False, False, False],
+          [False, True, True, True, True],
+          [True, True, False, True, False],
+          [True, False, False, False, False],
+          [True, False, True, True, True]]
+    maze.finalise(mz)
+    assert len(maze.room_coordinates(mz)) == 1
+    assert mz[4][1] or mz [3][3]

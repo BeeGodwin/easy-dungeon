@@ -41,9 +41,10 @@ class Maze:
             return True
         return False
 
-    # def make_tree(self)
+    # TODO def make_tree(self)
     # make a logical map of the maze from player's starting point
     # identify terminii and put loot there
+
 
 def make_maze(size):
     """returns a maze ready for play."""
@@ -56,13 +57,35 @@ def make_maze(size):
         else:
             mz.append(join_rooms(mz[i - 1], make_row(size, r, True)))
 
-    # rooms = list_room_coordinates(mz)
-    # while len(rooms) > 1:
-    #     # if more than one room, starting with the smallest room,
-    #     # look for boundaries.
-    #
-    #     rooms = list_room_coordinates(mz)
+    finalise(mz)
+
     return mz
+
+
+def finalise(mz):
+    """Given a nearly-done maze, hacks the fuck out of it to bodge our way
+    to the finish line. Modifies mz."""
+    rooms = room_coordinates(mz)
+
+    if len(rooms) == 1:
+        return
+
+    bubble = rooms.pop(0)
+
+    if len(bubble) == 1:
+        x, y = bubble[0]
+        pop_bubble(mz, x, y)
+    else:
+        max_y = len(mz) - 1
+        cands = []
+        for i in range(len(bubble)):
+            x, y = bubble.pop(0)
+            if y == max_y and x % 2 == 0:
+                cands.append((x, y))
+        x, y = random.choice(cands)
+        pop_bubble(mz, x, y)
+
+    finalise(mz)
 
 
 def make_row(size, r, wall):
@@ -124,7 +147,7 @@ def get_adj_tiles(ary, x, y):
 
 def room_coordinates(boolean_maze):
     """returns a coordinate list of all the tiles in the room containing
-    tile at (x, y)."""
+    tile at (x, y). Sorted by size, with small rooms first."""
     wrk = deepcopy(boolean_maze)
     room_list = []
 
@@ -150,74 +173,15 @@ def map_room(mz_cpy, coord_lst, x, y):
             map_room(mz_cpy, coord_lst, adj_x, adj_y)
 
 
-# def find_boundary(room_1, room_2):
-#     """returns a list of all removable walls (False values) that would connect room 1
-#     and room 2."""
-#     # iterate thru for even values.
-#         # do both rooms have values of this x?
-#         # what about this y?
-#         # are the two closest y values of that x exactly 2 different?
-#         # or, the two closest x values of that y?
-#         # if so we have a boundary. Add it to the list.
-#
-#     return []
-#     pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def room_count(bools):  # is there a way to not have to copy before sending to this? also, func.
-#     """Counts rooms. Takes a 2d array of bools. Copy the array before
-#     sending (bad coding there!)"""
-#     n = 0
-#
-#     for y in range(len(bools)):
-#         for x in range(len(bools[0])):
-#             if bools[y][x]:
-#                 n += 1
-#                 self.flood_fill(bools, x, y)
-#     return n
-#
-#
-# def flood_fill(bools, x, y, n=0):  # func!
-#     """for the cell with value True at x, y in 2D array bools, first
-#      mark it False, and if adjacent cells are True, call flood_fill
-#      on them also. Fills any area bounded by False values."""
-#     if bools[y][x]:
-#         bools[y][x] = False
-#         n += 1
-#         for (x_2, y_2) in self.get_adj_tiles(bools, x, y):
-#             if bools[y_2][x_2]:
-#                 n = self.flood_fill(bools, x_2, y_2, n)
-#         return n
-#     else:
-#         return n
-#
-
-#
-#
-# # def complete_maze(self, bools):  # see if you still need to do this when at bottom of rabbit hole
-# #     """Takes an almost-finished maze of boolean values. Ensures that the
-# #     maze consists of one 'room', and if not, modifies it so it does.
-# #     Returns completed maze of boolean values."""
-# #     # print(self.room_count(deepcopy(bools)))
-# #     # # plan B!
-# #     # while self.room_count(deepcopy(bools)) > 1:
-# #     #     count = self.room_count([copy(bools[-1])])
-# #     #     # bools[-1] = self.make_rooms_in_row(bools[-1], 1)
-# #
-# #     return bools
-#
-
-#
+def pop_bubble(bn_mz, x, y):
+    """Given an (x, y) in bn_mz, flip one of its adjacent False values to True.
+    Modifies bn_mz and returns the (x, y) that was flipped, or None."""
+    adj = get_adj_tiles(bn_mz, x, y)
+    for i in range(len(adj)):
+        a_x, a_y = adj.pop(0)
+        if not bn_mz[a_y][a_x]:
+            adj.append((a_x, a_y))
+    if len(adj) > 0:
+        flip = random.randrange(0, len(adj))
+        flip_x, flip_y = adj[flip][0], adj[flip][1]
+        bn_mz[flip_y][flip_x] = True

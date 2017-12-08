@@ -1,4 +1,5 @@
 {
+  "test_dungeon.py::test_find_edge": true,
   "test_dungeon.py::test_init_maze": true,
   "test_dungeon.py::test_list_room_coordinates": true
 }
