@@ -91,3 +91,13 @@ def test_finalise():
     maze.finalise(mz)
     assert len(maze.room_coordinates(mz)) == 1
     assert mz[4][1] or mz [3][3]
+
+
+def test_repair():
+    mz = [[True, True, True, True, True],
+          [True, False, False, False, False],
+          [True, True, True, True, True],
+          [True, False, True, False, False],
+          [True, True, True, True, True]]
+    mz = maze.repair(mz)
+    assert not mz[3][0] or not mz[3][2]

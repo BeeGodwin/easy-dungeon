@@ -58,6 +58,7 @@ def make_maze(size):
             mz.append(join_rooms(mz[i - 1], make_row(size, r, True)))
 
     finalise(mz)
+    mz = repair(mz)
 
     return mz
 
@@ -86,6 +87,22 @@ def finalise(mz):
         pop_bubble(mz, x, y)
 
     finalise(mz)
+
+
+def repair(mz):
+    """Takes a boolean maze that has had the fuck hacked out of it by the
+    previous algo, and fixes it. Looks at the last 3 rows and fills in walls
+    the penultimate (wall) row that don't affect the room count."""
+    last_rows = deepcopy(mz[-3:])
+    # rm_count = len(room_coordinates(last_rows))
+    for i in range(len(last_rows[1])):
+        if last_rows[1][i]:
+            last_rows[1][i] = False
+            rm_count = len(room_coordinates(mz[:-3] + last_rows))
+            if rm_count > 1:
+                last_rows[1][i] = True
+
+    return mz[:-3] + last_rows
 
 
 def make_row(size, r, wall):
