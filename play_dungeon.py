@@ -22,12 +22,17 @@ def main():
     fps = 30
 
     tile_sq = 33
-    tile_px = 16
+    tile_px = 48
     mz_px = tile_px * (tile_sq + 2)
     mz = Maze(size=tile_sq, tile_px=tile_px)
-    mz_rect = Rect((wi - mz_px) / 2, (hi - mz_px) / 2, mz_px, mz_px)
+    damp = 4
 
     player = Player()
+    p_anchor = Rect((wi - tile_px) // 2, (hi - tile_px) // 2, tile_px, tile_px)
+    
+    mz_rect = Rect(p_anchor.left - (player.x * tile_px),
+                   p_anchor.top - (player.y * tile_px),
+                   mz_px, mz_px)
 
     while True:
 
@@ -43,11 +48,32 @@ def main():
             else:
                 player.next_x, player.next_y = player.x, player.y
 
+        mz_rect = position_maze(p_anchor, player, mz_rect, tile_px, damp)
         d_surf.fill((0, 0, 0))
         draw_maze(d_surf, mz.mz, mz_rect)
         draw_player(d_surf, player, mz, mz_rect)
         pygame.display.update()
         clock.tick(fps)
+
+
+def position_maze(p_anchor, player, mz_rect, tile_px, dmp):
+    """Return a new mz_rect based on the player's position, to keep the player centred."""
+    new_left = p_anchor.left - tile_px * player.x
+    new_top = p_anchor.top - tile_px * player.y
+    left_delta = new_left - mz_rect.left
+    top_delta = new_top - mz_rect.top
+    if abs(left_delta) > dmp:
+        if left_delta > 0:
+            left_delta = dmp
+        else:
+            left_delta = -dmp
+    if abs(top_delta) > dmp:
+        if top_delta > 0:
+            top_delta = dmp
+        else:
+            top_delta = -dmp
+    new_mz_rect = Rect(mz_rect.left + left_delta, mz_rect.top + top_delta, mz_rect.width, mz_rect.height)
+    return new_mz_rect
 
 
 def draw_maze(d_surf, mz, mz_rect):
@@ -59,6 +85,15 @@ def draw_maze(d_surf, mz, mz_rect):
             rct_top = mz_rect.top + t_px * y
             tile_rct = Rect(rct_left, rct_top, t_px, t_px)
             d_surf.fill(mz[y][x].col, tile_rct)  # PH
+
+
+def zoom(mz, px_delta):
+    """Zoom by incrementing or decrementing tile size. Returns the new tile size."""
+    mz.tile_px += px_delta
+    for y in range(len(mz.mz)):
+        for x in range(len(mz.mz)):
+            mz.mz[y][x].px += px_delta
+    return mz.tile_px
 
 
 def draw_player(d_surf, player, mz, mz_rect):

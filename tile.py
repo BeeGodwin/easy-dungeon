@@ -11,6 +11,9 @@ class Tile:
             return True
         return False
 
+    def set_px(self, px):
+        self.px = px
+
 
 class Wall(Tile):
 
