@@ -28,12 +28,13 @@ def main():
 
     player = Player()
     p_anchor = Rect((wi - tile_px) // 2, (hi - tile_px) // 2, tile_px, tile_px)
-    
+
     mz_rect = Rect(p_anchor.left - (player.x * tile_px),
                    p_anchor.top - (player.y * tile_px),
                    mz_px, mz_px)
 
     fog = FogLayer(mz)
+    f_surf = pygame.Surface(res, pygame.SRCALPHA)
 
     while True:
 
@@ -49,11 +50,13 @@ def main():
             else:
                 player.next_x, player.next_y = player.x, player.y
 
+        fog.update_fog(player)
         mz_rect = position_maze(p_anchor, player, mz_rect, tile_px, damp)
         damp = update_damping(p_anchor, mz_rect)
         d_surf.fill((0, 0, 0))
         draw_maze(d_surf, mz.mz, mz_rect)
         draw_player(d_surf, player, mz, mz_rect)
+        draw_fog(f_surf, d_surf, fog, mz_rect)
         pygame.display.update()
         clock.tick(fps)
 
@@ -95,6 +98,16 @@ def draw_maze(d_surf, mz, mz_rect):
             rct_top = mz_rect.top + t_px * y
             tile_rct = Rect(rct_left, rct_top, t_px, t_px)
             d_surf.fill(mz[y][x].col, tile_rct)  # PH
+
+
+def draw_fog(f_surf, d_surf, fog, mz_rect):
+    rects = fog.fog_rects(mz_rect)
+    for y in range(len(rects)):
+        for x in range(len(rects)):
+            rect, col = rects[y][x]
+            col.a = fog.fog[y][x]
+            f_surf.fill(col, rect)
+    d_surf.blit(f_surf.convert_alpha(), (0, 0))
 
 
 def zoom(mz, px_delta):

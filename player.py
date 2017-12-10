@@ -1,10 +1,11 @@
 class Player:
 
-    def __init__(self, x=1, y=1):
+    def __init__(self, x=1, y=1, sight_r=3):
         self.x = x
         self.y = y
         self.next_x = x
         self.next_y = y
+        self.sight_r = sight_r
 
     def handle_input(self, ky):
         """Handles keyboard input."""
