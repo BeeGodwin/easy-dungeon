@@ -2,10 +2,12 @@ import maze
 from maze import Maze
 import play_dungeon
 from player import Player
+from fog import FogLayer
 from tile import Tile
 from tile import Wall
 import random
 from copy import deepcopy
+from pygame import Rect, Color
 
 
 def test_make_row():
@@ -101,3 +103,20 @@ def test_repair():
           [True, True, True, True, True]]
     mz = maze.repair(mz)
     assert not mz[3][0] or not mz[3][2]
+
+
+def test_update_fog():
+    pass
+
+
+def test_fog_rects():
+    mz = Maze(size=5)
+    fog = FogLayer(mz)
+    assert len(fog.fog) == 7
+    assert len(fog.fog[0]) == 7
+    assert mz.tile_px == fog.px
+    rects = fog.fog_rects()
+    assert len(rects) == 7
+    assert len(rects[0]) == 7
+    assert type(rects[0][0][0]) == Rect
+    assert type(rects[0][0][1]) == Color

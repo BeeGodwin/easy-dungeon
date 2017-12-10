@@ -4,11 +4,9 @@ import sys
 from math import sqrt
 from maze import Maze
 from player import Player
-
+from fog import FogLayer
 
 # TODO some sort of 'fog of war' effect.
-# TODO a zoom effect, so we scroll around the maze, and it is bigger than scr?
-# but might be HARD.
 # TODO a logical tree in maze class; loot in terminii
 # TODO antagonists
 # TODO tweening
@@ -16,7 +14,7 @@ from player import Player
 
 def main():
     pygame.init()
-    res = wi, hi = (800, 600)
+    res = wi, hi = (1024, 768)
     d_surf = pygame.display.set_mode(res)
 
     clock = pygame.time.Clock()
@@ -34,6 +32,8 @@ def main():
     mz_rect = Rect(p_anchor.left - (player.x * tile_px),
                    p_anchor.top - (player.y * tile_px),
                    mz_px, mz_px)
+
+    fog = FogLayer(mz)
 
     while True:
 
