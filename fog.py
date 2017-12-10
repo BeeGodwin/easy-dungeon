@@ -9,9 +9,12 @@ class FogLayer:
 
     def __init__(self, mz: Maze):
         self.fog = [[255 for _ in range(mz.size + 2)] for _ in range(mz.size + 2)]
+        self.seen = [[False for _ in range(mz.size + 2)] for _ in range(mz.size + 2)]
+        self.seen_lvl = 192
         self.px = mz.tile_px
         self.reveal = [[False for _ in range(mz.size + 2)] for _ in range(mz.size + 2)]
         self.col = Color('black')
+
 
     def fog_rects(self, mz_rect):
         """Returns a 2d array of (rect, color) tuples."""
@@ -36,11 +39,16 @@ class FogLayer:
             for x in range(len(self.fog[0])):
                 xdiff = abs(x - p.x)
                 ydiff = abs(y - p.y)
-                # print('Cell at ({}, {}) has xdiff {}, ydiff {}.'.format(x, y, xdiff, ydiff))
-                if ydiff <= p.sight_r and xdiff <= p.sight_r and xdiff + ydiff <= p.sight_r:
-                    # print("Setting alpha on ({}, {})".format(x, y))
-                    self.fog[y][x] = 0
+                diff = xdiff + ydiff
+                if ydiff <= p.sight_r and xdiff <= p.sight_r and diff <= p.sight_r:
+                    step = 255 // p.sight_r
+                    self.fog[y][x] = 0 + step * (diff - 1)
+                    self.seen[y][x] = True
+                    if self.fog[y][x] > self.seen_lvl:
+                        self.fog[y][x] = self.seen_lvl
                 else:
-                    # clamp alpha value
-                    pass
+                    if self.seen[y][x]:
+                        self.fog[y][x] = self.seen_lvl
+                self.fog[p.y][p.x] = 0
+
 

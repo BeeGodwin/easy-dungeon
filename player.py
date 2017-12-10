@@ -1,6 +1,6 @@
 class Player:
 
-    def __init__(self, x=1, y=1, sight_r=3):
+    def __init__(self, x=1, y=1, sight_r=5):
         self.x = x
         self.y = y
         self.next_x = x
