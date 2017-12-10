@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import sys
+from math import sqrt
 from maze import Maze
 from player import Player
 
@@ -49,11 +50,20 @@ def main():
                 player.next_x, player.next_y = player.x, player.y
 
         mz_rect = position_maze(p_anchor, player, mz_rect, tile_px, damp)
+        damp = update_damping(p_anchor, mz_rect)
         d_surf.fill((0, 0, 0))
         draw_maze(d_surf, mz.mz, mz_rect)
         draw_player(d_surf, player, mz, mz_rect)
         pygame.display.update()
         clock.tick(fps)
+
+
+def update_damping(p_anchor, mz_rect):
+    x_delta = mz_rect.left - p_anchor.left
+    y_delta = mz_rect.top - p_anchor.top
+    delta = abs(max(x_delta, y_delta))
+    new_damp = int(sqrt(delta) / 2)
+    return new_damp
 
 
 def position_maze(p_anchor, player, mz_rect, tile_px, dmp):
