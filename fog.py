@@ -15,7 +15,6 @@ class FogLayer:
         self.reveal = [[False for _ in range(mz.size + 2)] for _ in range(mz.size + 2)]
         self.col = Color('black')
 
-
     def fog_rects(self, mz_rect):
         """Returns a 2d array of (rect, color) tuples."""
         fog_rects = []
@@ -29,7 +28,6 @@ class FogLayer:
                 col.a = self.fog[y][x]
                 row.append((fog_tile, col))
             fog_rects.append(row)
-
         return fog_rects
 
     def update_fog(self, p: Player):

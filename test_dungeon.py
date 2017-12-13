@@ -1,5 +1,6 @@
 import maze
 from maze import Maze
+from mazetree import MazeTree, MazeTreeBranch
 import play_dungeon
 from player import Player
 from fog import FogLayer
@@ -109,13 +110,12 @@ def test_update_fog():
     mz = Maze(size=5)
     mz_rect = Rect(0, 0, mz.tile_px * 7, mz.tile_px * 7)
     fog = FogLayer(mz)
-    for row in fog.fog:
-        print(row)
+    # for row in fog.fog:
+        # print(row)
     player = Player()
     fog.update_fog(player)
-    for row in fog.fog:
-        print(row)
-
+    # for row in fog.fog:
+        # print(row)
 
 def test_fog_rects():
     mz = Maze(size=5)
@@ -132,4 +132,22 @@ def test_fog_rects():
     assert rects[0][0][0] == Rect(0, 0, mz.tile_px, mz.tile_px)
     assert rects[0][0][1] == Color('black')
     assert rects[0][0][1].a == 255
+
+
+def test_branch_creation():
+    branch = MazeTreeBranch(None, 0, 0)
+    assert branch.tiles == [(0, 0)]
+
+
+
+def test_tree_creation():
+    bools = [[True, True, True, True, True],
+          [True, False, False, False, True],
+          [True, True, True, False, True],
+          [True, False, False, False, False],
+          [True, True, True, True, True]]
+    tree = MazeTree(bools, 0, 0)
+    assert type(tree.tree) == dict
+    assert type(tree.tree[(0, 0)]) == MazeTreeBranch
+
 

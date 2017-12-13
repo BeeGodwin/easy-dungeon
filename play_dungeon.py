@@ -6,7 +6,6 @@ from maze import Maze
 from player import Player
 from fog import FogLayer
 
-# TODO some sort of 'fog of war' effect.
 # TODO a logical tree in maze class; loot in terminii
 # TODO antagonists
 # TODO tweening
@@ -34,7 +33,7 @@ def main():
                    mz_px, mz_px)
 
     fog = FogLayer(mz)
-    f_surf = pygame.Surface(res, pygame.SRCALPHA)
+    f_surf = pygame.Surface(res, SRCALPHA)
 
     while True:
 
