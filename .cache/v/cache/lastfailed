@@ -2,6 +2,7 @@
   "test_dungeon.py::test_find_edge": true,
   "test_dungeon.py::test_init_maze": true,
   "test_dungeon.py::test_list_room_coordinates": true,
+  "test_dungeon.py::test_print_tree": true,
   "test_dungeon.py::test_tree_creation": true,
   "test_dungeon.py::test_vector": true
 }

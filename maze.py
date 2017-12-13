@@ -2,7 +2,7 @@ from math import sqrt
 import random
 from copy import copy, deepcopy
 from tile import *
-from mazetree import MazeTree, MazeTreeBranch
+# from mazetree import MazeTree, MazeTreeBranch
 
 
 class Maze:
@@ -13,7 +13,7 @@ class Maze:
         self.tile_px = tile_px
         self.lgc_mz = make_maze(self.size)
         self.mz = self.instantiate_tiles()
-        self.tree = MazeTree(self)
+        # self.tree = MazeTree(self)
 
     def instantiate_tiles(self):
         """Takes the 'inner' maze represented by 2d array bools, and turns it into
@@ -45,34 +45,30 @@ class Maze:
             return True
         return False
 
-    def vector(self, x, y, dir):
-        """Interrogates lgc_mz and returns a list of (x, y) tuples
-        describing a corridor starting at (x, y). List ends when it
-        reaches a junction."""
-
-        vec_lst = []
-        done = False
-        while not done:
-            vec_lst.append((x, y))
-
-            # TODO fix here!!!
-
-            moves = self.legal_moves(x, y)
-            if (len(moves) == 1 and len(vec_lst) != 1 # we hit a dead end
-            ) or (len(moves) >= 2 and len(vec_lst) == 1  # start tile has choices
-            ) or (len(moves) > 2  # any tile has more than 2 choices
-            ):
-                done = True
-                continue
-            else:
-                nx_x, nx_y = vector_helper(dir, x, y)
-                if (nx_x, nx_y) in self.legal_moves(x, y):
-                    x = nx_x
-                    y = nx_y
-                    continue
-                else:
-                    done = True   # suspect these conditionals are wrong!
-        return vec_lst
+    # def vector(self, x, y, dr):
+    #     """Interrogates lgc_mz and returns a list of (x, y) tuples
+    #     describing a corridor starting at (x, y). List ends when it
+    #     reaches a junction or a corner."""
+    #
+    #     vec_lst = []
+    #     adding_tiles = True
+    #     while adding_tiles:
+    #         vec_lst.append((x, y))
+    #         moves = self.legal_moves(x, y)
+    #         moves = list(filter(lambda z: z not in vec_lst, moves))  # remove locs already in
+    #         # print(moves)
+    #         if len(moves) > 1:  # a junction
+    #             # print('junction')
+    #             adding_tiles = False
+    #             # T_DO spawn children
+    #         elif len(moves) == 1:  # an onward move?
+    #             # print('onward')
+    #             x, y = vector_helper(dr, x, y)
+    #         else:  # corner case or dead end
+    #             # print('corner, dead end')
+    #             adding_tiles = False
+    #
+    #     return vec_lst
 
     def legal_moves(self, x, y):
         """Returns a list of (x, y) tuples representing legal moves from this
@@ -256,6 +252,7 @@ def vector_helper(dir, x, y):
         else:
             adj_x = x - 1
     return (adj_x, adj_y)
+
 
 def dir_helper(loc1, loc2):
     """Takes two (x, y) tuples representing adjacent tiles, and
