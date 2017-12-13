@@ -2,7 +2,6 @@ from math import sqrt
 import random
 from copy import copy, deepcopy
 from tile import *
-# from mazetree import MazeTree, MazeTreeBranch
 
 
 class Maze:
@@ -13,7 +12,6 @@ class Maze:
         self.tile_px = tile_px
         self.lgc_mz = make_maze(self.size)
         self.mz = self.instantiate_tiles()
-        # self.tree = MazeTree(self)
 
     def instantiate_tiles(self):
         """Takes the 'inner' maze represented by 2d array bools, and turns it into
@@ -44,31 +42,6 @@ class Maze:
         if type(self.mz[y][x]) == Tile:  # might we want an attr on the tile?
             return True
         return False
-
-    # def vector(self, x, y, dr):
-    #     """Interrogates lgc_mz and returns a list of (x, y) tuples
-    #     describing a corridor starting at (x, y). List ends when it
-    #     reaches a junction or a corner."""
-    #
-    #     vec_lst = []
-    #     adding_tiles = True
-    #     while adding_tiles:
-    #         vec_lst.append((x, y))
-    #         moves = self.legal_moves(x, y)
-    #         moves = list(filter(lambda z: z not in vec_lst, moves))  # remove locs already in
-    #         # print(moves)
-    #         if len(moves) > 1:  # a junction
-    #             # print('junction')
-    #             adding_tiles = False
-    #             # T_DO spawn children
-    #         elif len(moves) == 1:  # an onward move?
-    #             # print('onward')
-    #             x, y = vector_helper(dr, x, y)
-    #         else:  # corner case or dead end
-    #             # print('corner, dead end')
-    #             adding_tiles = False
-    #
-    #     return vec_lst
 
     def legal_moves(self, x, y):
         """Returns a list of (x, y) tuples representing legal moves from this
