@@ -22,7 +22,7 @@ def test_make_row():
 def test_instantiate_tiles():
     m = Maze(size=3)
     bool_maze = [[True, True, True], [False, False, True], [True, True, True]]
-    mz = m.instantiate_tiles(bool_maze)
+    mz = m.instantiate_tiles()
     assert len(mz) == 5
     assert len(mz[0]) == 5
     wall, tile = Wall(), Tile()
@@ -30,7 +30,7 @@ def test_instantiate_tiles():
         assert mz[0][i] == wall
         assert mz[i][0] == wall
     assert mz[1][1] == tile
-    assert mz[2][1] == wall
+    assert mz[2][2] == wall
 
 
 def test_move_is_legal():
@@ -40,10 +40,10 @@ def test_move_is_legal():
     assert player.x == 1
     assert player.y == 1
     player.next_x = 2
-    assert mz.move_is_legal(player.next_x, player.next_y)
+    assert mz.move_is_legal((player.next_x, player.next_y))
     player.update_pos()
     player.next_y = 2
-    assert not mz.move_is_legal(player.next_x, player.next_y)
+    assert not mz.move_is_legal((player.next_x, player.next_y))
 
 
 def test_join_rooms():
@@ -143,14 +143,24 @@ def test_branch_creation():
     # assert branch.tiles == [(0, 0)]
 
 
+def test_vector_helper():
+    assert maze.vector_helper('n', 0, 0) == (0, -1)
+    assert maze.vector_helper('e', 0, 0) == (1, 0)
+    assert maze.vector_helper('w', 0, 0) == (-1, 0)
+    assert maze.vector_helper('s', 0, 0) == (0, 1)
+
+
 def test_vector():
-    mz = Maze(size=5)
-    mz.lgc_mz = [[True, True, True, True, True],
-                 [True, False, False, False, True],
-                 [True, True, True, False, True],
-                 [True, False, False, False, False],
-                 [True, True, True, True, True]]
-    assert mz.vector(0, 0, 'e') == [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)]
+    mz = Maze(size=3)
+    print()
+    mz.mz[2][1] = Wall()
+    assert mz.vector(1, 1, 'e') == [(1, 1), (2, 1), (3, 1)]
+    assert mz.vector(1, 1, 's') == [(1, 1)]
+    assert mz.vector(1, 1, 'n') == [(1, 1)]
+    assert mz.vector(3, 1, 's') == [(3, 1)]
+    assert mz.vector(1, 3, 'e') == [(1, 3), (2, 3), (3, 3)]
+    assert mz.vector(3, 1, 'w') == [(3, 1), (2, 1), (1, 1)]
+    assert mz.vector(3, 3, 'w') == [(3, 3), (2, 3), (1, 3)]
 
 # def test_tree_creation():
 #     bools = [[True, True, True, True, True],

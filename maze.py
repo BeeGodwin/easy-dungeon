@@ -12,21 +12,21 @@ class Maze:
         self.size = size  # tiles square. Should be odd.
         self.tile_px = tile_px
         self.lgc_mz = make_maze(self.size)
-        self.tree = MazeTree(self)
-        self.mz = self.instantiate_tiles(self.lgc_mz)
+        # self.tree = MazeTree(self)
+        self.mz = self.instantiate_tiles()
 
-    def instantiate_tiles(self, bool_mz):
+    def instantiate_tiles(self):
         """Takes the 'inner' maze represented by 2d array bools, and turns it into
         a maze of tiles. Returns this maze."""
-        wall_top = [Wall(px=self.tile_px) for _ in range(len(bool_mz[0]) + 2)]
+        wall_top = [Wall(px=self.tile_px) for _ in range(len(self.lgc_mz[0]) + 2)]
         wall_bottom = deepcopy(wall_top)
         maze = [wall_top]
 
-        for y in range(len(bool_mz)):
+        for y in range(len(self.lgc_mz)):
             row = [Wall(px=self.tile_px)]
 
-            for x in range(len(bool_mz[0])):
-                if bool_mz[y][x]:
+            for x in range(len(self.lgc_mz[0])):
+                if self.lgc_mz[y][x]:
                     row.append(Tile(px=self.tile_px))
                 else:
                     row.append(Wall(px=self.tile_px))
@@ -38,8 +38,9 @@ class Maze:
 
         return maze
 
-    def move_is_legal(self, x, y):  # TODO generalise this to use an x and y
+    def move_is_legal(self, loc):
         """Check to see that the player's next move is legal and return True / False."""
+        x, y = loc
         if type(self.mz[y][x]) == Tile:  # might we want an attr on the tile?
             return True
         return False
@@ -48,12 +49,32 @@ class Maze:
         """Interrogates lgc_mz and returns a list of (x, y) tuples
         describing a corridor starting at (x, y). List ends when it
         reaches a junction."""
-        dir_v = vector_helper(dir)
 
-        pass
+        vec_lst = []
+        done = False
+        while not done:
+            vec_lst.append((x, y))
+            moves = self.legal_moves(x, y)
+            if (len(moves) == 1 and len(vec_lst) != 1 # we hit a dead end
+            ) or (len(moves) >= 2 and len(vec_lst) == 1  # start tile has choices
+            ) or (len(moves) > 2  # any tile has more than 2 choices
+            ):
+                done = True
+                continue
+            else:
+                nx_x, nx_y = vector_helper(dir, x, y)
+                if (nx_x, nx_y) in self.legal_moves(x, y):
+                    x = nx_x
+                    y = nx_y
+                    continue
+                else:
+                    done = True
+        return vec_lst
 
-    def adj_tiles(self, x, y):
-        return get_adj_tiles(self.lgc_mz, x, y)
+    def legal_moves(self, x, y):
+        moves = ((a_x, a_y) for (a_x, a_y) in get_adj_tiles(self.mz, x, y))
+        return list(filter(lambda loc: self.move_is_legal(loc), moves))
+
 
 def make_maze(size):
     """returns a maze ready for play."""
@@ -156,7 +177,8 @@ def join_rooms(row_n, wall_row):
 
 def get_adj_tiles(ary, x, y):
     """returns a list of (x, y) tuples describing adjacent coordinates in
-    array ary. Respects the edge of the board and corners."""
+    array ary. Respects the edge of the board and corners. Doesn't care about
+    what's in the tile."""
     y_size = len(ary) - 1
     x_size = len(ary[0]) - 1
     lst = []
@@ -213,14 +235,22 @@ def pop_bubble(bn_mz, x, y):
         bn_mz[flip_y][flip_x] = True
 
 
-def vector_helper(dir):
-    if dir == 'n':
-        dir_v = (0, -1)
-    elif dir == 'e':
-        dir_v = (1, 0)
-    elif dir == 'w':
-        dir_v = (-1, 0)
-    elif dir == 's':
-        dir_v = (0, 1)
-    return dir_v
+def vector_helper(dir, x, y):
+    """Takes a single char dir from {'n', 'e', 'w', 's'} and an x, y, and gives you the next tile
+    in that direction."""
+    if dir == 'n' or dir == 's':
+        adj_x = x
+        if dir == 'n':
+            adj_y = y - 1
+        else:
+            adj_y = y + 1
+    else:
+        adj_y = y
+        if dir == 'e':
+            adj_x = x + 1
+        else:
+            adj_x = x - 1
+    return (adj_x, adj_y)
+
+
 

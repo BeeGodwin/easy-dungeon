@@ -44,7 +44,7 @@ def main():
             elif e.type == KEYDOWN:
                 player.handle_input(e.key)
 
-            if mz.move_is_legal(player.next_x, player.next_y):
+            if mz.move_is_legal((player.next_x, player.next_y)):
                 player.update_pos()
             else:
                 player.next_x, player.next_y = player.x, player.y
