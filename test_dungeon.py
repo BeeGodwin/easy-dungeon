@@ -135,14 +135,6 @@ def test_fog_rects():
     assert rects[0][0][1].a == 255
 
 
-def test_branch_creation():
-    mz = Maze()
-    branch = MazeTreeBranch(mz, None, 0, 0)
-    assert branch.x == 0
-    assert branch.y == 0
-    # assert branch.tiles == [(0, 0)]
-
-
 def test_vector_helper():
     assert maze.vector_helper('n', 0, 0) == (0, -1)
     assert maze.vector_helper('e', 0, 0) == (1, 0)
@@ -162,12 +154,27 @@ def test_vector():
     assert mz.vector(3, 1, 'w') == [(3, 1), (2, 1), (1, 1)]
     assert mz.vector(3, 3, 'w') == [(3, 3), (2, 3), (1, 3)]
 
-# def test_tree_creation():
-#     bools = [[True, True, True, True, True],
-#           [True, False, False, False, True],
-#           [True, True, True, False, True],
-#           [True, False, False, False, False],
-#           [True, True, True, True, True]]
-#     tree = MazeTree(bools, 0, 0)
-#     assert type(tree.tree) == dict
-#     assert type(tree.tree[(0, 0)]) == MazeTreeBranch
+
+def test_dir_helper():
+    loc1 = (0, 0)
+    loc2 = (0, 1)
+    assert maze.dir_helper(loc1, loc2) == 's'
+    loc1 = (0, 1)
+    loc2 = (0, 0)
+    assert maze.dir_helper(loc1, loc2) == 'n'
+    loc1 = (0, 0)
+    loc2 = (1, 0)
+    assert maze.dir_helper(loc1, loc2) == 'e'
+    loc1 = (1, 0)
+    loc2 = (0, 0)
+    assert maze.dir_helper(loc1, loc2) == 'w'
+
+
+def test_branch_creation():
+    random.seed(1)
+    mz = Maze(size=3)
+    branch = MazeTreeBranch(mz, None, 1, 1, 'e')
+    assert branch.tiles[0][0] == 1
+    assert branch.tiles[0][1] == 1
+
+

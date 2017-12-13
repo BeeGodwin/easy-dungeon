@@ -72,6 +72,8 @@ class Maze:
         return vec_lst
 
     def legal_moves(self, x, y):
+        """Returns a list of (x, y) tuples representing legal moves from this
+        (x, y)."""
         moves = ((a_x, a_y) for (a_x, a_y) in get_adj_tiles(self.mz, x, y))
         return list(filter(lambda loc: self.move_is_legal(loc), moves))
 
@@ -252,5 +254,18 @@ def vector_helper(dir, x, y):
             adj_x = x - 1
     return (adj_x, adj_y)
 
-
-
+def dir_helper(loc1, loc2):
+    """Takes two (x, y) tuples representing adjacent tiles, and
+    returns a single character from {'n', 'e', 'w', 's'} representing
+    the direction of loc1 to loc2."""
+    x1, y1 = loc1
+    x2, y2 = loc2
+    if x1 == x2:
+        if y2 > y1:
+            return 's'
+        else:
+            return 'n'
+    if x2 > x1:
+        return 'e'
+    else:
+        return 'w'

@@ -7,6 +7,8 @@ class FogLayer:
     """A 2d array of integer values between 0 and 255 inclusive.
     Has methods which return an array of rects ready for drawing."""
 
+    # TODO could look lovely if fog range was tiled at a higher res.
+
     def __init__(self, mz: Maze):
         self.fog = [[255 for _ in range(mz.size + 2)] for _ in range(mz.size + 2)]
         self.seen = [[False for _ in range(mz.size + 2)] for _ in range(mz.size + 2)]

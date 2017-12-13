@@ -4,7 +4,7 @@ class MazeTree:
 
     def __init__(self, mz):
         """Builds a new tree from Maze mz starting at 0, 0."""
-        self.root = MazeTreeBranch(mz, None, 0, 0)  # make an empty tree
+        self.root = MazeTreeBranch(mz, None, 0, 0, 'e')  # make an empty tree
         # build the tree in the branch init method, using recursion and
         # by interrogating the maze object.
 
@@ -12,26 +12,17 @@ class MazeTree:
 
 
 class MazeTreeBranch:
-    """One branch of a MazeTree. Consists of a parent, an ordered sequence of at least one
-    (x, y) tuples, and a pair of children."""
+    """One branch of a MazeTree. Consists of a parent, an ordered sequence of
+    at least one (x, y) tuples, and optionally some children."""
 
-    def __init__(self, mz, parent, x, y):
-
-        self.parent = parent
-
-        self.x = x
-        self.y = y
-
-        # self.direction = self.set_direction(mz)
-
-        self.tiles = 0
-
-        self.child_n = None
-        self.child_e = None
-        self.child_w = None
-        self.child_s = None
-
-    def set_direction(self, mz):
-        pass
+    def __init__(self, mz, parent, x, y, dir):
+        self.parent = parent  # prev tile is parent.tiles[-1]
+        self.tiles = mz.vector(x, y, dir)
+        last_x, last_y = last_tile = self.tiles[-1]
+        next_tiles = mz.legal_moves(last_x, last_y)
+        if last_tile in next_tiles:
+            next_tiles.remove(last_tile)
+        for tile in next_tiles:
+            pass
 
 
