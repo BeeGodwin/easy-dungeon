@@ -2,6 +2,7 @@ from math import sqrt
 import random
 from copy import copy, deepcopy
 from tile import *
+from mazetree import MazeTree, MazeTreeBranch
 
 
 class Maze:
@@ -10,7 +11,9 @@ class Maze:
     def __init__(self, size=17, tile_px=32):
         self.size = size  # tiles square. Should be odd.
         self.tile_px = tile_px
-        self.mz = self.instantiate_tiles(make_maze(self.size))
+        self.lgc_mz = make_maze(self.size)
+        self.tree = MazeTree(self)
+        self.mz = self.instantiate_tiles(self.lgc_mz)
 
     def instantiate_tiles(self, bool_mz):
         """Takes the 'inner' maze represented by 2d array bools, and turns it into
@@ -35,16 +38,22 @@ class Maze:
 
         return maze
 
-    def move_is_legal(self, player):
+    def move_is_legal(self, x, y):  # TODO generalise this to use an x and y
         """Check to see that the player's next move is legal and return True / False."""
-        if type(self.mz[player.next_y][player.next_x]) == Tile:  # might we want an attr on the tile?
+        if type(self.mz[y][x]) == Tile:  # might we want an attr on the tile?
             return True
         return False
 
-    # TODO def make_tree(self)
-    # make a logical map of the maze from player's starting point
-    # identify terminii and put loot there
+    def vector(self, x, y, dir):
+        """Interrogates lgc_mz and returns a list of (x, y) tuples
+        describing a corridor starting at (x, y). List ends when it
+        reaches a junction."""
+        dir_v = vector_helper(dir)
 
+        pass
+
+    def adj_tiles(self, x, y):
+        return get_adj_tiles(self.lgc_mz, x, y)
 
 def make_maze(size):
     """returns a maze ready for play."""
@@ -202,3 +211,16 @@ def pop_bubble(bn_mz, x, y):
         flip = random.randrange(0, len(adj))
         flip_x, flip_y = adj[flip][0], adj[flip][1]
         bn_mz[flip_y][flip_x] = True
+
+
+def vector_helper(dir):
+    if dir == 'n':
+        dir_v = (0, -1)
+    elif dir == 'e':
+        dir_v = (1, 0)
+    elif dir == 'w':
+        dir_v = (-1, 0)
+    elif dir == 's':
+        dir_v = (0, 1)
+    return dir_v
+

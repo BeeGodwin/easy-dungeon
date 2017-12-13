@@ -39,7 +39,7 @@ class FogLayer:
                 ydiff = abs(y - p.y)
                 diff = xdiff + ydiff
                 if ydiff <= p.sight_r and xdiff <= p.sight_r and diff <= p.sight_r:
-                    step = 255 // p.sight_r
+                    step = 255 // p.sight_r  # TODO make it circular, not diamond?
                     self.fog[y][x] = 0 + step * (diff - 1)
                     self.seen[y][x] = True
                     if self.fog[y][x] > self.seen_lvl:
@@ -48,5 +48,3 @@ class FogLayer:
                     if self.seen[y][x]:
                         self.fog[y][x] = self.seen_lvl
                 self.fog[p.y][p.x] = 0
-
-

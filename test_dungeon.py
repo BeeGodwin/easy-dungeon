@@ -40,10 +40,10 @@ def test_move_is_legal():
     assert player.x == 1
     assert player.y == 1
     player.next_x = 2
-    assert mz.move_is_legal(player)
+    assert mz.move_is_legal(player.next_x, player.next_y)
     player.update_pos()
     player.next_y = 2
-    assert not mz.move_is_legal(player)
+    assert not mz.move_is_legal(player.next_x, player.next_y)
 
 
 def test_join_rooms():
@@ -93,7 +93,7 @@ def test_finalise():
           [True, False, True, True, True]]
     maze.finalise(mz)
     assert len(maze.room_coordinates(mz)) == 1
-    assert mz[4][1] or mz [3][3]
+    assert mz[4][1] or mz[3][3]
 
 
 def test_repair():
@@ -111,11 +111,12 @@ def test_update_fog():
     mz_rect = Rect(0, 0, mz.tile_px * 7, mz.tile_px * 7)
     fog = FogLayer(mz)
     # for row in fog.fog:
-        # print(row)
+    # print(row)
     player = Player()
     fog.update_fog(player)
     # for row in fog.fog:
-        # print(row)
+    # print(row)
+
 
 def test_fog_rects():
     mz = Maze(size=5)
@@ -135,19 +136,28 @@ def test_fog_rects():
 
 
 def test_branch_creation():
-    branch = MazeTreeBranch(None, 0, 0)
-    assert branch.tiles == [(0, 0)]
+    mz = Maze()
+    branch = MazeTreeBranch(mz, None, 0, 0)
+    assert branch.x == 0
+    assert branch.y == 0
+    # assert branch.tiles == [(0, 0)]
 
 
+def test_vector():
+    mz = Maze(size=5)
+    mz.lgc_mz = [[True, True, True, True, True],
+                 [True, False, False, False, True],
+                 [True, True, True, False, True],
+                 [True, False, False, False, False],
+                 [True, True, True, True, True]]
+    assert mz.vector(0, 0, 'e') == [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)]
 
-def test_tree_creation():
-    bools = [[True, True, True, True, True],
-          [True, False, False, False, True],
-          [True, True, True, False, True],
-          [True, False, False, False, False],
-          [True, True, True, True, True]]
-    tree = MazeTree(bools, 0, 0)
-    assert type(tree.tree) == dict
-    assert type(tree.tree[(0, 0)]) == MazeTreeBranch
-
-
+# def test_tree_creation():
+#     bools = [[True, True, True, True, True],
+#           [True, False, False, False, True],
+#           [True, True, True, False, True],
+#           [True, False, False, False, False],
+#           [True, True, True, True, True]]
+#     tree = MazeTree(bools, 0, 0)
+#     assert type(tree.tree) == dict
+#     assert type(tree.tree[(0, 0)]) == MazeTreeBranch
