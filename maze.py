@@ -54,6 +54,9 @@ class Maze:
         done = False
         while not done:
             vec_lst.append((x, y))
+
+            # TODO fix here!!!
+
             moves = self.legal_moves(x, y)
             if (len(moves) == 1 and len(vec_lst) != 1 # we hit a dead end
             ) or (len(moves) >= 2 and len(vec_lst) == 1  # start tile has choices
@@ -68,7 +71,7 @@ class Maze:
                     y = nx_y
                     continue
                 else:
-                    done = True
+                    done = True   # suspect these conditionals are wrong!
         return vec_lst
 
     def legal_moves(self, x, y):

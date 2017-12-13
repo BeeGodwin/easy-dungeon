@@ -16,16 +16,18 @@ class MazeTreeBranch:
     """One branch of a MazeTree. Consists of a parent, an ordered sequence of
     at least one (x, y) tuples, and optionally some children."""
 
-    def __init__(self, mz, tree, parent, x, y, dir):
+    def __init__(self, mz, tree, parent, x, y, dr):
         self.parent = parent
-        self.dir = dir
+        self.dr = dr
         self.x = x
         self.y = y
-        self.tiles = mz.vector(x, y, dir)
+        self.tiles = mz.vector(x, y, dr)  # doesn't seem to be returning right vals.
+        print(x, y, mz.vector(x, y, dr))
         # print('New branch. My tiles {}. Tree tiles {}. Union {}.'.format(
         #     self.tiles, set(tree.tiles), set(tree.tiles) | set(self.tiles)
         # ))
-        tree.tiles = set(tree.tiles).union(self.tiles)
+        for tile in self.tiles:
+            tree.tiles.add(tile)
         self.chn = {}
 
         last_x, last_y = last_tile = self.tiles[-1]
@@ -35,15 +37,15 @@ class MazeTreeBranch:
             next_tiles.remove(last_tile)
 
         for tile in next_tiles:
-            dir = dir_helper(last_tile, tile)
-            new_x, new_y = tile
             if tile not in tree.tiles:
-                self.chn[dir] = MazeTreeBranch(mz, self, tree, new_x, new_y, dir)  # infinite
+                dr = dir_helper(last_tile, tile)
+                new_x, new_y = tile
+                self.chn[dr] = MazeTreeBranch(mz, tree, self, new_x, new_y, dr)
 
     def __str__(self):
         s = 'Branch at ({}, {}) going {} for {} tiles. {} children.'.format(
             self.x, self.y,
-            self.dir, len(self.tiles), len(self.chn)
+            self.dr, len(self.tiles), len(self.chn)
         )
         return s
 
