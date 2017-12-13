@@ -12,8 +12,8 @@ class Maze:
         self.size = size  # tiles square. Should be odd.
         self.tile_px = tile_px
         self.lgc_mz = make_maze(self.size)
-        # self.tree = MazeTree(self)
         self.mz = self.instantiate_tiles()
+        self.tree = MazeTree(self)
 
     def instantiate_tiles(self):
         """Takes the 'inner' maze represented by 2d array bools, and turns it into

@@ -173,8 +173,25 @@ def test_dir_helper():
 def test_branch_creation():
     random.seed(1)
     mz = Maze(size=3)
-    branch = MazeTreeBranch(mz, None, 1, 1, 'e')
-    assert branch.tiles[0][0] == 1
-    assert branch.tiles[0][1] == 1
+    branch = MazeTreeBranch(mz, mz.tree, None, 1, 1, 'e')
+    assert sorted(branch.tiles)[0][0] == 1
+    assert sorted(branch.tiles)[0][1] == 1
+
+
+def test_print_tree():
+    random.seed(1)
+    mz = Maze(size=3)
+    print_tree('', mz.tree.root)
+    print(mz.tree.tiles)
+
+
+def print_tree(tabs, branch):
+    tabs += ' '
+    print(tabs, branch)
+    print(tabs, sorted(branch.tiles))
+    for child in branch.chn.values():
+        print_tree(tabs, child)
+
+
 
 
