@@ -6,9 +6,7 @@ from maze import Maze
 from player import Player
 from fog import FogLayer
 
-# TODO a logical tree in maze class; loot in terminii
 # TODO antagonists
-# TODO tweening
 
 
 def main():

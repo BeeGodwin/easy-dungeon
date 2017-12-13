@@ -142,15 +142,6 @@ def test_vector_helper():
     assert maze.vector_helper('s', 0, 0) == (0, 1)
 
 
-# def test_vector():
-#     random.seed(1)
-#     mz = Maze(size=3)
-#     assert mz.vector(1, 1, 'e') == [(1, 1)]
-#     assert mz.vector(2, 1, 'e') == [(2, 1), (3, 1)]
-#     assert mz.vector(1, 2, 's') == [(1, 2), (1, 3)]
-#     assert mz.vector(2, 3, 'e') == [(2, 3), (3, 3)]
-
-
 def test_dir_helper():
     loc1 = (0, 0)
     loc2 = (0, 1)
@@ -164,31 +155,5 @@ def test_dir_helper():
     loc1 = (1, 0)
     loc2 = (0, 0)
     assert maze.dir_helper(loc1, loc2) == 'w'
-
-
-# def test_branch_creation():
-#     random.seed(1)
-#     mz = Maze(size=3)
-#     branch = MazeTreeBranch(mz, mz.tree, None, 1, 1, 'e')
-#     assert type(mz.tree) == MazeTree
-#     assert type(mz.tree.tiles) == set
-#     assert sorted(branch.tiles)[0][0] == 1
-#     assert sorted(branch.tiles)[0][1] == 1
-
-#
-# def test_print_tree():
-#     random.seed(1)
-#     mz = Maze(size=3)
-#     print(sorted(mz.tree.tiles))
-#     print_tree('', mz.tree.root, mz.tree)
-#
-# def print_tree(tabs, branch, tree):
-#     tabs += ' '
-#     print(tabs, branch)
-#     print(tabs, sorted(branch.tiles))
-#     for child in branch.chn.values():
-#         print_tree(tabs, child, tree)
-
-
 
 
