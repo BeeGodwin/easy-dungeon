@@ -6,18 +6,16 @@ from maze import Maze
 from player import Player
 from fog import FogLayer
 
-# TODO a logical tree in maze class; loot in terminii
-# TODO antagonists
-# TODO tweening
+# parked a failed tree navigation idea in this branch
 
 
 def main():
     pygame.init()
-    res = wi, hi = (1024, 768)
+    res = wi, hi = (1200, 800)
     d_surf = pygame.display.set_mode(res)
 
     clock = pygame.time.Clock()
-    fps = 30
+    fps = 60
 
     tile_sq = 33
     tile_px = 48
