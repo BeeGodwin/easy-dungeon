@@ -1,3 +1,5 @@
 Easy Dungeon
 
-A tiny little maze game in pygame.
+A small experiment in maze generation, implemented in Pygame.
+
+WASD to move.
